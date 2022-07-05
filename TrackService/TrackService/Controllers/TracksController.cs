@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using TrackService.DTOs.TrackDTOs;
 using TrackService.Extensions;
+using System.Threading.Tasks;
+using TrackService.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -51,22 +53,21 @@ namespace TrackService.Controllers
                 },
             };
 
+        private readonly TrackRepository _trackRepository = new();
+
         // GET: api/<TracksController>
         [HttpGet]
-        public ActionResult<IEnumerable<GetTrackDTO>> Get()
+        public async Task<IEnumerable<GetTrackDTO>> GetAsync()
         {
-            return _tracks
-                .Select(track => track.AsDTO())
-                .ToList();
+            var tracks = (await _trackRepository.GetAllAsync()).Select(track => track.AsDTO());
+            return tracks;
         }
 
         // GET api/<TracksController>/5
         [HttpGet("{id}")]
-        public ActionResult<GetTrackDTO> GetById(Guid id)
+        public async Task<ActionResult<GetTrackDTO>> GetByIdAsync(Guid id)
         {
-            var track = _tracks
-                .Where(track => track.Id == id)
-                .SingleOrDefault();
+            var track = await _trackRepository.GetAsync(id);
 
             if (track == null) {
                 return NotFound();
@@ -77,7 +78,7 @@ namespace TrackService.Controllers
 
         // POST api/<TracksController>
         [HttpPost]
-        public ActionResult<GetTrackDTO> Post([FromBody] CreateTrackDTO trackDTO)
+        public async Task<ActionResult<GetTrackDTO>> PostAsync([FromBody] CreateTrackDTO trackDTO)
         {
             string title = trackDTO.Title.Replace(" ", "_").ToLowerInvariant();
             var track = new Track { 
@@ -91,51 +92,49 @@ namespace TrackService.Controllers
                 UploadDate = DateTimeOffset.UtcNow,
             };
 
-            _tracks.Add(track);
+            await _trackRepository.CreateAsync(track);
 
-            return CreatedAtAction(nameof(GetById), new { id = track.Id }, track.AsDTO());
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, track.AsDTO());
         }
 
         // PUT api/<TracksController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] UpdateTrackDTO trackDTO)
+        public async Task<IActionResult> PutAsync(Guid id, [FromBody] UpdateTrackDTO trackDTO)
         {
-            var existingTrack = _tracks.Where(track => track.Id == id).SingleOrDefault();
+            var existingTrack = await _trackRepository.GetAsync(id);
 
             if (existingTrack == null)
             {
                 return NotFound();
             }
 
-            var updatedTrack = new Track
-            {
-                Id = existingTrack.Id,
-                UploadDate = existingTrack.UploadDate,
-                Title = trackDTO.Title,
-                Description = trackDTO.Description,
-                Duration = TimeSpan.FromTicks(trackDTO.Duration),
-                MediaUrl = trackDTO.MediaUrl,
-                ArtworkUrl = trackDTO.ArtworkUrl,
-                UrlId = trackDTO.UrlId
-            };
+            existingTrack.Id = existingTrack.Id;
+            existingTrack.UploadDate = existingTrack.UploadDate;
+            existingTrack.Title = trackDTO.Title;
+            existingTrack.Description = trackDTO.Description;
+            existingTrack.Duration = TimeSpan.FromTicks(trackDTO.Duration);
+            existingTrack.MediaUrl = trackDTO.MediaUrl;
+            existingTrack.ArtworkUrl = trackDTO.ArtworkUrl;
+            existingTrack.UrlId = trackDTO.UrlId;
 
-            var index = _tracks.FindIndex(existingTrack => existingTrack.Id == id);
-            _tracks[index] = updatedTrack;
+            await _trackRepository.UpdateAsync(existingTrack);
+            
             return NoContent();
         }
 
         // DELETE api/<TracksController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var index = _tracks.FindIndex(existingTrack => existingTrack.Id == id);
+            var track = await _trackRepository.GetAsync(id);
 
-            if (index < 0)
+            if (track == null)
             {
                 return NotFound();
             }
 
-            _tracks.RemoveAt(index);
+            await _trackRepository.RemoveAsync(track.Id);
+
             return NoContent();
         }
     }
