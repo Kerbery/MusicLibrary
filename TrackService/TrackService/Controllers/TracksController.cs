@@ -53,7 +53,12 @@ namespace TrackService.Controllers
                 },
             };
 
-        private readonly TrackRepository _trackRepository = new();
+        private readonly ITrackRepository _trackRepository;
+
+        public TracksController(ITrackRepository trackRepository)
+        {
+            _trackRepository = trackRepository;
+        }
 
         // GET: api/<TracksController>
         [HttpGet]

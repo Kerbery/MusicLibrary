@@ -6,19 +6,16 @@ using TrackService.Models;
 
 namespace TrackService.Repositories
 {
-    public class TrackRepository
+    public class TrackRepository : ITrackRepository
     {
         private const string collectionName = "tracks";
         private readonly IMongoCollection<Track> dbCollection;
 
         private readonly FilterDefinitionBuilder<Track> filterBuilder = Builders<Track>.Filter;
 
-        public TrackRepository( )
+        public TrackRepository(IMongoDatabase database)
         {
-            var mongoClient = new MongoClient("mongodb://mongodb:27017");
-            var database = mongoClient.GetDatabase("Tracks");
             dbCollection = database.GetCollection<Track>(collectionName);
-
         }
 
         public async Task<IReadOnlyCollection<Track>> GetAllAsync()
@@ -34,7 +31,7 @@ namespace TrackService.Repositories
 
         public async Task CreateAsync(Track entity)
         {
-            if (entity==null)
+            if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }

@@ -2,7 +2,7 @@
 
 namespace TrackService.Models
 {
-    public class Track
+    public class Track : IEntity
     {
         public Guid Id { get; set; }
         public string UrlId { get; internal set; }
