@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>2ec13dd2-565e-405d-8892-d3e57b07d05a</ProjectGuid>
+    <ProjectGuid>22e02fcd-4e1c-4b29-8ddb-6a829f810268</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>trackservice</DockerServiceName>

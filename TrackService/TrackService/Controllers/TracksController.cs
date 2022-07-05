@@ -6,7 +6,7 @@ using System.Linq;
 using TrackService.DTOs.TrackDTOs;
 using TrackService.Extensions;
 using System.Threading.Tasks;
-using TrackService.Repositories;
+using Common;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -53,9 +53,9 @@ namespace TrackService.Controllers
                 },
             };
 
-        private readonly ITrackRepository _trackRepository;
+        private readonly IRepository<Track> _trackRepository;
 
-        public TracksController(ITrackRepository trackRepository)
+        public TracksController(IRepository<Track> trackRepository)
         {
             _trackRepository = trackRepository;
         }

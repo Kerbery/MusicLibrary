@@ -1,4 +1,4 @@
-﻿namespace TrackService.Settings
+﻿namespace Common.Settings
 {
     public class ServiceSettings
     {

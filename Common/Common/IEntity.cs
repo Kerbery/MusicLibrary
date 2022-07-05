@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrackService.Models
+﻿namespace Common
 {
     public interface IEntity
     {
