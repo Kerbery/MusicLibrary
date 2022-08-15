@@ -1,6 +1,6 @@
+using Common.MassTransit;
 using Common.MongoDB;
 using Common.Settings;
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TrackService.Models;
-using TrackService.Settings;
 
 namespace TrackService
 {
@@ -27,17 +26,8 @@ namespace TrackService
             var serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
 
             services.AddMongo()
-                    .AddMongoRepository<Track>("tracks");
-
-            services.AddMassTransit(configurator =>
-            {
-                configurator.UsingRabbitMq((context, configurator)=>
-                {
-                    var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
-                    configurator.Host(rabbitMqSettings.Host);
-                    configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
-                });
-            });
+                    .AddMongoRepository<Track>("tracks")
+                    .AddMasstransitRabbitMq();
 
             services.AddControllers(options => 
             {
