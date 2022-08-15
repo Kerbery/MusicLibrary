@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo
+    ports:
+        - 27017:27017
+    volumes:
+        - mongodbdata:/data/db
+
+  playlistservice:
+    image: ${DOCKER_REGISTRY-}playlistservice
+    build:
+      context: .
+      dockerfile: PlaylistService/Dockerfile
+      
+volumes:
+  mongodbdata:

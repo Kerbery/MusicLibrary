@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32505.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistService", "PlaylistService\PlaylistService.csproj", "{B5F75F6C-B9C3-4A19-A180-10D86BCBFBBA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AAD76359-C722-4755-8F7C-4A968E0F5B4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B5F75F6C-B9C3-4A19-A180-10D86BCBFBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F75F6C-B9C3-4A19-A180-10D86BCBFBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F75F6C-B9C3-4A19-A180-10D86BCBFBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F75F6C-B9C3-4A19-A180-10D86BCBFBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD76359-C722-4755-8F7C-4A968E0F5B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD76359-C722-4755-8F7C-4A968E0F5B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD76359-C722-4755-8F7C-4A968E0F5B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD76359-C722-4755-8F7C-4A968E0F5B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C938AE7B-D8C5-44A7-9D34-7032E1356C43}
+	EndGlobalSection
+EndGlobal
