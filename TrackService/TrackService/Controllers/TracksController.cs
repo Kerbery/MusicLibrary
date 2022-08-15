@@ -7,6 +7,8 @@ using TrackService.DTOs.TrackDTOs;
 using TrackService.Extensions;
 using System.Threading.Tasks;
 using Common;
+using MassTransit;
+using Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -55,9 +57,12 @@ namespace TrackService.Controllers
 
         private readonly IRepository<Track> _trackRepository;
 
-        public TracksController(IRepository<Track> trackRepository)
+        private readonly IPublishEndpoint _publishEndpoint;
+
+        public TracksController(IRepository<Track> trackRepository, IPublishEndpoint endpoint)
         {
             _trackRepository = trackRepository;
+            _publishEndpoint = endpoint;
         }
 
         // GET: api/<TracksController>
@@ -99,6 +104,8 @@ namespace TrackService.Controllers
 
             await _trackRepository.CreateAsync(track);
 
+            await _publishEndpoint.Publish(new TrackCreated(track.Id, track.Title,track.UrlId, track.Duration, track.ArtworkUrl, track.Description));
+
             return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, track.AsDTO());
         }
 
@@ -123,7 +130,9 @@ namespace TrackService.Controllers
             existingTrack.UrlId = trackDTO.UrlId;
 
             await _trackRepository.UpdateAsync(existingTrack);
-            
+
+            await _publishEndpoint.Publish(new TrackUpdated(existingTrack.Id, existingTrack.Title, existingTrack.UrlId, existingTrack.Duration, existingTrack.ArtworkUrl, existingTrack.Description));
+
             return NoContent();
         }
 
@@ -139,6 +148,7 @@ namespace TrackService.Controllers
             }
 
             await _trackRepository.RemoveAsync(track.Id);
+            await _publishEndpoint.Publish(new TrackDeleted(track.Id));
 
             return NoContent();
         }

@@ -1,15 +1,32 @@
 version: '3.4'
+name: MusicLibrary
 
 services:
   mongodb:
     image: mongo
+    container_name: mongo
     ports:
         - 27017:27017
     volumes:
-        - ./database:/data/db
+        - mongodbdata:/data/db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:7672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
 
   trackservice:
     image: ${DOCKER_REGISTRY-}trackservice
+    container_name: trackservice
     build:
       context: .
       dockerfile: TrackService/Dockerfile
+
+volumes:
+  mongodbdata:
+  rabbitmqdata:

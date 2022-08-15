@@ -15,4 +15,7 @@
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts\Contracts.csproj" />
+  </ItemGroup>
 </Project>

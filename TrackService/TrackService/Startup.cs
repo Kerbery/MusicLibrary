@@ -1,4 +1,6 @@
 using Common.MongoDB;
+using Common.Settings;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TrackService.Models;
+using TrackService.Settings;
 
 namespace TrackService
 {
@@ -21,8 +24,20 @@ namespace TrackService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+
             services.AddMongo()
                     .AddMongoRepository<Track>("tracks");
+
+            services.AddMassTransit(configurator =>
+            {
+                configurator.UsingRabbitMq((context, configurator)=>
+                {
+                    var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+                    configurator.Host(rabbitMqSettings.Host);
+                    configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
+                });
+            });
 
             services.AddControllers(options => 
             {
