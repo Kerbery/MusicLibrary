@@ -104,7 +104,7 @@ namespace TrackService.Controllers
 
             await _trackRepository.CreateAsync(track);
 
-            await _publishEndpoint.Publish(new TrackCreated(track.Id, track.Title,track.UrlId, track.Duration, track.ArtworkUrl, track.Description));
+            await _publishEndpoint.Publish(new TrackCreated(track.Id, track.Title,track.UrlId, track.Duration, track.ArtworkUrl, track.Description, track.UploadDate));
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, track.AsDTO());
         }

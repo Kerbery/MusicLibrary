@@ -1,3 +1,4 @@
+using Common.MassTransit;
 using Common.MongoDB;
 using PlaylistService.Models;
 
@@ -7,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMongo()
     .AddMongoRepository<Playlist>("playlists")
-    .AddMongoRepository<PlaylistItem>("playlistItems");
+    .AddMongoRepository<PlaylistItem>("playlistItems")
+    .AddMongoRepository<Track>("tracks")
+    .AddMasstransitRabbitMq();
+
 
 builder.Services.AddControllers(options =>
 {

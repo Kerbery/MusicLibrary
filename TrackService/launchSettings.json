@@ -6,8 +6,11 @@
       "composeLaunchServiceName": "trackservice",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
       "commandVersion": "1.0",
+	  "publishAllPorts": true,
+	  "useSSL": true,
+	  "httpPort": 5000,
+	  "sslPort": 5001,
       "serviceActions": {
-        "mongodb": "StartWithoutDebugging",
         "trackservice": "StartDebugging"
       }
     }
