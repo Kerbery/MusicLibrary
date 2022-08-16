@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "mongodb": "StartWithoutDebugging",
+        "playlistservice": "StartDebugging",
+        "rabbitmq": "StartWithoutDebugging",
+        "trackservice": "StartDebugging"
+      }
+    },
+    "Start All Services": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "mongodb": "StartWithoutDebugging",
+        "playlistservice": "StartDebugging",
+        "rabbitmq": "StartWithoutDebugging",
+        "trackservice": "StartDebugging"
+      }
+    }
+  }
+}

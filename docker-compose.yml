@@ -1,0 +1,60 @@
+#version: '3.4'
+
+#services:
+#  playlistservice:
+#    image: ${DOCKER_REGISTRY-}playlistservice
+#    build:
+#      context: .
+#      dockerfile: PlaylistService/PlaylistService/Dockerfile
+
+#  trackservice:
+#    image: ${DOCKER_REGISTRY-}trackservice
+#    build:
+#      context: .
+#      dockerfile: TrackService/TrackService/Dockerfile
+version: '3.4'
+name: MusicLibrary
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:7672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+      
+  playlistservice:
+    image: ${DOCKER_REGISTRY-}playlistservice
+    container_name: playlistservice
+    ports:
+      - "8080:80"
+      - "8081:443"
+    build:
+      context: .
+      dockerfile: PlaylistService/PlaylistService/Dockerfile
+
+  trackservice:
+    image: ${DOCKER_REGISTRY-}trackservice
+    container_name: trackservice
+    ports:
+      - "8084:80"
+      - "8085:443"
+    build:
+      context: .
+      dockerfile: TrackService/TrackService/Dockerfile
+
+      
+volumes:
+  mongodbdata:
+  rabbitmqdata:
