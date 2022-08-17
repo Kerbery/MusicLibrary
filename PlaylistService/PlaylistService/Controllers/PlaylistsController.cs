@@ -15,19 +15,27 @@ namespace PlaylistService.Controllers
     {
         private readonly IRepository<Playlist> playlistRepository;
         private readonly IRepository<PlaylistItem> playlistItemRepository;
+        private readonly IRepository<Track> trackRepository;
 
-        public PlaylistsController(IRepository<Playlist> playlistRepository, IRepository<PlaylistItem> playlistItemRepository)
+        public PlaylistsController(IRepository<Playlist> playlistRepository, IRepository<PlaylistItem> playlistItemRepository, IRepository<Track> trackRepository)
         {
             this.playlistRepository = playlistRepository;
             this.playlistItemRepository = playlistItemRepository;
+            this.trackRepository = trackRepository;
         }
 
         // GET: api/<PlaylistsController>/?userId={userId}
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId)
         {
+
+            var tracks = await trackRepository.GetAllAsync();
+
             var playlistItems = (await playlistItemRepository.GetAllAsync())
-                .Select(playlistItem => playlistItem.AsDTO());
+                .Select(playlistItem => {
+                    var track = tracks.SingleOrDefault(track => track.Id == playlistItem.TrackId);
+                    return playlistItem.AsDTO(track?.AsDTO());
+                    });
 
             var playlists = (await playlistRepository.GetAllAsync(playlist => userId == Guid.Empty || playlist.UserId == userId))
                 .Select(playlist => playlist.AsDTO(playlistItems.Where(playlistItem => playlistItem.PlaylistId == playlist.Id)));
@@ -45,9 +53,13 @@ namespace PlaylistService.Controllers
                 return NotFound();
             }
 
-            var playlistItems = (await playlistItemRepository.GetAllAsync(playlistItem => playlistItem.PlaylistId == id))
-                .Select(playlistItem => playlistItem.AsDTO());
+            var tracks = await trackRepository.GetAllAsync();
 
+            var playlistItems = (await playlistItemRepository.GetAllAsync(playlistItem => playlistItem.PlaylistId == id))
+                .Select(playlistItem => {
+                    var track = tracks.SingleOrDefault(track => track.Id == playlistItem.TrackId);
+                    return playlistItem.AsDTO(track?.AsDTO());
+                });
 
             return Ok(playlist.AsDTO(playlistItems));
         }

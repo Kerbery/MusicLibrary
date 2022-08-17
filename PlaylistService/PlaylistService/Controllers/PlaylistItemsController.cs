@@ -13,10 +13,12 @@ namespace PlaylistService.Controllers
     public class PlaylistItemsController : ControllerBase
     {
         private readonly IRepository<PlaylistItem> playlistItemRepository;
+        private readonly IRepository<Track> trackRepository;
 
-        public PlaylistItemsController(IRepository<PlaylistItem> playlistItemsRepository)
+        public PlaylistItemsController(IRepository<PlaylistItem> playlistItemsRepository, IRepository<Track> trackRepository)
         {
             this.playlistItemRepository = playlistItemsRepository;
+            this.trackRepository = trackRepository;
         }
 
 
@@ -26,7 +28,11 @@ namespace PlaylistService.Controllers
         {
             var playlistItems = (await playlistItemRepository
                     .GetAllAsync(playlistItem => playlistId == Guid.Empty || playlistItem.PlaylistId == playlistId))
-                    .Select(playlistItem => playlistItem.AsDTO());
+                    .Select(async playlistItem =>
+                    {
+                        var track = await trackRepository.GetAsync(playlistItem.TrackId);
+                        return playlistItem.AsDTO(track.AsDTO());
+                    });
 
             return Ok(playlistItems);
         }
@@ -58,8 +64,9 @@ namespace PlaylistService.Controllers
             };
 
             await playlistItemRepository.CreateAsync(playlistItem);
+            var track = await trackRepository.GetAsync(playlistItem.TrackId);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = playlistItem.Id }, playlistItem.AsDTO());
+            return CreatedAtAction(nameof(GetAsync), new { id = playlistItem.Id }, playlistItem.AsDTO(track.AsDTO()));
         }
 
         // PUT api/<PlaylistItemsController>/5

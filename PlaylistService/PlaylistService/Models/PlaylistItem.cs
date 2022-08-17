@@ -6,7 +6,7 @@ namespace PlaylistService.Models
     {
         public Guid Id { get; set; }
         public Guid PlaylistId { get; set; }
-        public int Position { get; set; }
+        public uint Position { get; set; }
         public Guid TrackId { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
     }

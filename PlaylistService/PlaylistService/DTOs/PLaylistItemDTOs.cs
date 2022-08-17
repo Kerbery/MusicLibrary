@@ -1,12 +1,15 @@
-﻿namespace PlaylistService.DTOs.PlaylistItemDTOs
+﻿using PlaylistService.DTOs.TrackDTOs;
+
+namespace PlaylistService.DTOs.PlaylistItemDTOs
 {
     public record GetPlaylistItemDTO(
         Guid Id,
         Guid PlaylistId,
         Guid TrackId,
-        int Position,
-        DateTimeOffset CreatedDate);
+        uint Position,
+        DateTimeOffset CreatedDate,
+        GetTrackDTO GetTrackDTO);
     public record CreatePlaylistItemDTO(Guid PlaylistId, Guid TrackId);
-    public record UpdatePlaylistItemDTO(Guid PLaylistItemId, int Position);
+    public record UpdatePlaylistItemDTO(Guid PLaylistItemId, uint Position);
     public record DeletePlaylistItemDTO(Guid PlaylistItemId);
 }
