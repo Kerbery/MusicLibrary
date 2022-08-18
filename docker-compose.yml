@@ -54,6 +54,18 @@ services:
       context: .
       dockerfile: TrackService/TrackService/Dockerfile
 
+  #frontend:
+  #  container_name: frontend
+  #  image: ${DOCKER_REGISTRY-}frontend
+  #  build:
+  #    context: .
+  #    dockerfile: Frontend/Dockerfile
+  #  ports:
+  #    - "3000:80"
+  #    - "3001:443"
+  #  volumes:
+  #    - ./src:/app/src
+
       
 volumes:
   mongodbdata:
