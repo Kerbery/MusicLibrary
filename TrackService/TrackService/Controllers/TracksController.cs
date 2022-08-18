@@ -93,7 +93,7 @@ namespace TrackService.Controllers
             string title = trackDTO.Title.Replace(" ", "_").ToLowerInvariant();
             var track = new Track { 
                 Id = Guid.NewGuid(),
-                Duration = TimeSpan.FromTicks(trackDTO.Duration),
+                Duration = TimeSpan.FromSeconds(trackDTO.Duration),
                 Description = trackDTO.Description,
                 Title = trackDTO.Title,
                 UrlId = title,

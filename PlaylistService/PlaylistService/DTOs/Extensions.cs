@@ -38,7 +38,7 @@ namespace PlaylistService.DTOs
                     UrlId: track.UrlId,
                     Title: track.Title,
                     Description: track.Description,
-                    Duration: track.DurationTicks,
+                    Duration: track.DurationSeconds,
                     UploadDate: track.UploadDate
                 );
         }

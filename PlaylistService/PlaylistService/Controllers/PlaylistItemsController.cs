@@ -26,11 +26,13 @@ namespace PlaylistService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPlaylistItemDTO>>> GetPLaylistItemsAsync([FromQuery] Guid playlistId)
         {
+            var tracks = await trackRepository.GetAllAsync();
+
             var playlistItems = (await playlistItemRepository
                     .GetAllAsync(playlistItem => playlistId == Guid.Empty || playlistItem.PlaylistId == playlistId))
-                    .Select(async playlistItem =>
+                    .Select( playlistItem =>
                     {
-                        var track = await trackRepository.GetAsync(playlistItem.TrackId);
+                        var track = tracks.SingleOrDefault((track) => track.Id==playlistItem.TrackId);
                         return playlistItem.AsDTO(track.AsDTO());
                     });
 
@@ -47,7 +49,9 @@ namespace PlaylistService.Controllers
                 return NotFound();
             }
 
-            return Ok(playlistItem);
+            var track = await trackRepository.GetAsync((track) => track.Id == playlistItem.TrackId);
+
+            return Ok(playlistItem.AsDTO(track.AsDTO()));
         }
 
         // POST api/<PlaylistItemsController>

@@ -26,7 +26,7 @@ namespace PlaylistService.Controllers
 
         // GET: api/<PlaylistsController>/?userId={userId}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId)
+        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId )
         {
 
             var tracks = await trackRepository.GetAllAsync();
