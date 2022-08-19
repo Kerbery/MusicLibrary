@@ -42,7 +42,7 @@ export default class PLaylist extends React.Component {
   }
 
   async populatePlaylistData(playlistId) {
-    const response = await fetch(`/api/Playlists/${playlistId}`);
+    const response = await fetch(`/gateway/Playlists/${playlistId}`);
     const data = await response.json();
     console.log("Fetched data:", data);
     this.setState({

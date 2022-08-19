@@ -1,10 +1,10 @@
 ﻿const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const context = ["/api/Playlists", "/api/PlaylistItems"];
+const context = ["/gateway/Playlists", "/gateway/PlaylistItems"];
 
 module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {
-    target: "https://localhost:8081",
+    target: "https://localhost:5003",
     secure: false,
   });
 
