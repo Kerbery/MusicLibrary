@@ -11,6 +11,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{5678381E-43E7-4742-BCFE-38D06BF3C350}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "IdentityService\IdentityService.csproj", "{7C8513B7-E2A8-44DC-A199-F3934665146D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5678381E-43E7-4742-BCFE-38D06BF3C350}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5678381E-43E7-4742-BCFE-38D06BF3C350}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5678381E-43E7-4742-BCFE-38D06BF3C350}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C8513B7-E2A8-44DC-A199-F3934665146D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C8513B7-E2A8-44DC-A199-F3934665146D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C8513B7-E2A8-44DC-A199-F3934665146D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C8513B7-E2A8-44DC-A199-F3934665146D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

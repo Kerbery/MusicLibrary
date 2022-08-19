@@ -14,6 +14,10 @@
           "Port": 443
         }
       ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ ]
+      },
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {

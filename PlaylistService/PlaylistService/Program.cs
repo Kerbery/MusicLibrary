@@ -1,5 +1,6 @@
 using Common.MassTransit;
 using Common.MongoDB;
+using Microsoft.IdentityModel.Tokens;
 using PlaylistService.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,18 @@ builder.Services.AddMongo()
     .AddMongoRepository<Track>("tracks")
     .AddMasstransitRabbitMq();
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "http://identityservice:80";
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            //Dangerous territory
+            ValidateAudience = false,
+            ValidateIssuer = false
+        };
+    });
 
 builder.Services.AddControllers(options =>
 {
@@ -32,6 +45,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

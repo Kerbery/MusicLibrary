@@ -1,4 +1,5 @@
 ﻿using Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlaylistService.DTOs;
 using PlaylistService.DTOs.PlaylistDTOs;
@@ -11,6 +12,7 @@ namespace PlaylistService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PlaylistsController : ControllerBase
     {
         private readonly IRepository<Playlist> playlistRepository;
