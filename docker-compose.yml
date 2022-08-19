@@ -37,6 +37,7 @@ services:
   playlistservice:
     image: ${DOCKER_REGISTRY-}playlistservice
     container_name: playlistservice
+    hostname: playlistservice
     ports:
       - "8080:80"
       - "8081:443"
@@ -47,6 +48,7 @@ services:
   trackservice:
     image: ${DOCKER_REGISTRY-}trackservice
     container_name: trackservice
+    hostname: trackservice
     ports:
       - "8084:80"
       - "8085:443"
@@ -67,6 +69,22 @@ services:
   #    - ./src:/app/src
 
       
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    container_name: apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    ports:
+      - "5002:80"
+      - "5003:443"
+    links:
+      - playlistservice
+      - trackservice
+    depends_on:
+      - playlistservice
+      - trackservice
+
 volumes:
   mongodbdata:
   rabbitmqdata:
