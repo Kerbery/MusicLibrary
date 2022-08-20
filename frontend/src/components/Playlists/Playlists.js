@@ -1,5 +1,6 @@
 import React from "react";
 import GridItem from "../GridItem/GridItem";
+import PlaylistsService from "../../services/playlists.service";
 
 export default class PLaylists extends React.Component {
   constructor(props) {
@@ -43,10 +44,20 @@ export default class PLaylists extends React.Component {
     );
   }
 
-  async populatePLaylistsData() {
-    const response = await fetch("/gateway/Playlists");
-    const data = await response.json();
-    console.log(data);
-    this.setState({ playlists: data, loading: false });
+  populatePLaylistsData() {
+    PlaylistsService.getAllPlaylists().then(
+      (response) => {
+        this.setState({ playlists: response.data, loading: false });
+      },
+      (error) => {
+        console.log(
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+        );
+      }
+    );
   }
 }
