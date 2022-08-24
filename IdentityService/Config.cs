@@ -18,19 +18,66 @@ namespace IdentityService
             new IdentityResource[]
              {
                  new IdentityResources.OpenId(),
-                 new IdentityResources.Profile()
+                 new IdentityResources.Profile(),
+                 new IdentityResource
+                 {
+                     Name = "role",
+                     UserClaims = new List<string> { "role" }
+                 }
              };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("playlistsAPI", "Playlists API"),
-                new ApiScope("PlaylistService", "Playlist Service")
+                new ApiScope("PlaylistsAPI", "Playlists API"),
+                new ApiScope("PlaylistService", "Playlist Service"),
+                new ApiScope("email", "E-Mail")
+            };
+
+        public static IEnumerable<ApiResource> ApiResources =>
+            new[]
+            {
+                new ApiResource("PlaylistsAPI")
+                {
+                    Scopes = new List<string>{ "PlaylistsAPI", "PlaylistService" },
+                    ApiSecrets = new List<Secret> { new Secret("ScopeSecret".Sha256())},
+                    UserClaims = new List<string> {"role"}
+                }
             };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
+                new Client
+                {
+                    ClientId = "m2m.client",
+                    ClientName = "Client Credentials Client",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = {new Secret("ClientSecret1".Sha256())},
+                    AllowedScopes = { "PlaylistsAPI", "PlaylistService", "email" }
+                },
+                new Client
+                {
+                    ClientId = "interactive",
+                    ClientSecrets = {new Secret("ClientSecret1".Sha256())},
+                    ClientName = "Playlists from client App",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    //RequireClientSecret = false,
+                    //AllowRememberConsent = false,
+                    RedirectUris = { "http://localhost:3000/signin-callback", "http://localhost:3000" },
+                    FrontChannelLogoutUri = "http://localhost:3000/",
+                    PostLogoutRedirectUris = { "http://localhost:3000/signout-callback" },
+                    AllowedCorsOrigins = { "http://localhost:3000" },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PlaylistsAPI", "PlaylistService", "email"
+                    },
+                    RequirePkce = true,
+                    RequireConsent = true,
+                    AllowPlainTextPkce = false,
+                },
                 new Client
                 {
                     ClientId = "playlistsClient",
@@ -39,30 +86,33 @@ namespace IdentityService
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "playlistsAPI", "PlaylistService" }
+                    AllowedScopes = { "PlaylistsAPI", "PlaylistService", "email" },
                 },
                 new Client
                 {
                     ClientId = "playlists_web",
                     ClientName = "Playlists from client App",
+                    RequireClientSecret = false,
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowRememberConsent = false,
                     RedirectUris = new List<string>()
                     {
-                        "https://localhost:3000/signin-oidc"// — this is client app port
+                        "http://localhost:3000/signin-callback"// — this is client app port
                     },
                     PostLogoutRedirectUris = new List<string>()
                     {
-                        "https://localhost:3000/signout-callback-oidc"
+                        "http://localhost:3000/signout-callback"
                     },
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("secret".Sha256())
-                    },
+                    AllowedCorsOrigins = { "http://localhost:3000" },
+                    //ClientSecrets = new List<Secret>
+                    //{
+                    //    new Secret("secret".Sha256())
+                    //},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,"playlistsAPI", "PlaylistService"
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PlaylistsAPI", "PlaylistService", "email"
                     }
                 }
             };
@@ -72,12 +122,12 @@ namespace IdentityService
                 new TestUser
                 {
                     SubjectId = "5BE86359–073C-434B-AD2D-A3932222DABE",
-                    Username = "mehmet",
-                    Password = "mehmet",
+                    Username = "alice",
+                    Password = "Pass123$",
                     Claims = new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.GivenName, "mehmet"),
-                        new Claim(JwtClaimTypes.FamilyName, "ozkaya")
+                        new Claim(JwtClaimTypes.GivenName, "Alice"),
+                        new Claim(JwtClaimTypes.FamilyName, "Smith")
                     }
                 }
             };
