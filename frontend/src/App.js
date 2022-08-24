@@ -4,6 +4,7 @@ import "./Site.css";
 
 import AuthService from "./services/auth.service";
 
+import SignInCallback from "./components/SignInCallback/SignInCallback";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import PLaylists from "./components/Playlists/Playlists";
@@ -17,27 +18,33 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.logOut = this.logOut.bind(this);
-    this.state = { currentUser: undefined };
+    this.state = { isLoading: false };
+    AuthService.finishedLoading = () => this.finishedLoading();
   }
 
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-  }
-
-  logOut() {
+  logOut(params) {
     AuthService.logout();
+    window.location.href = params.returnTo;
+  }
+
+  logIn() {
+    AuthService.login();
+  }
+
+  finishedLoading() {
+    this.setState({ isLoading: false });
   }
 
   render() {
-    const { currentUser } = this.state;
     var pages = ["Home", "Playlists", "Uploads"];
-
+    let { isLoading, isLoggedIn, user } = AuthService;
+    /*if (isLoading) {
+      return <div>Loading user... Please wait.{isLoading}</div>;
+    }*/
+    /*
+    if (error) {
+      return <div>Oops... {error.message}</div>;
+    }*/
     return (
       <div>
         <nav className="navbar navbar-dark bg-dark justify-content-between">
@@ -54,27 +61,29 @@ export default class App extends Component {
                     </Link>
                   </li>
                 ))}
-                {currentUser ? (
+                {isLoggedIn ? (
                   <div className="navbar-nav ml-auto">
                     <li className="nav-item">
                       <Link to={"/profile"} className="nav-link">
-                        {currentUser.username}
+                        {user?.given_name}
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <a
-                        href="/login"
+                      <Link
+                        to=""
                         className="nav-link"
-                        onClick={this.logOut}
+                        onClick={() =>
+                          this.logOut({ returnTo: window.location.origin })
+                        }
                       >
                         LogOut
-                      </a>
+                      </Link>
                     </li>
                   </div>
                 ) : (
                   <div className="navbar-nav ml-auto">
                     <li className="nav-item">
-                      <Link to={"/Login"} className="nav-link">
+                      <Link to="" className="nav-link" onClick={this.logIn}>
                         Login
                       </Link>
                     </li>
@@ -93,6 +102,7 @@ export default class App extends Component {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/Home" element={<Home />} />
+          <Route exact path="/signin-callback" element={<SignInCallback />} />
           <Route exact path="/Login" element={<Login />} />
           <Route exact path="/Register" element={<Register />} />
           <Route path="Playlists" element={<PLaylists />} />
