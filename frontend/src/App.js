@@ -9,6 +9,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Playlists from "./components/Playlists/Playlists";
 import WrappedPlaylist from "./components/Playlist/WrappedPlaylist";
+import WrappedTrack from "./components/Track/WrappedTrack";
 import Home from "./components/Home/Home";
 import Uploads from "./components/Uploads/Uploads";
 import NotFound from "./components/NotFound/NotFound";
@@ -105,10 +106,13 @@ export default class App extends Component {
           <Route exact path="/signin-callback" element={<SignInCallback />} />
           <Route exact path="/Login" element={<Login />} />
           <Route exact path="/Register" element={<Register />} />
+          <Route path="Uploads" element={<Uploads />} />
           <Route path="Playlists" element={<Playlists />} />
           <Route path="Playlists/:playlistId" element={<WrappedPlaylist />} />
-          <Route path="Uploads" element={<Uploads />} />
+          <Route path="track/:id" element={<WrappedTrack />} />
+          <Route path=":user/:id" element={<WrappedTrack />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="not-found" element={<NotFound />} />
         </Routes>
       </div>
     );

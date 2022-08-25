@@ -16,7 +16,7 @@
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ ]
+        "AllowedScopes": []
       },
       "DangerousAcceptAnyServerCertificateValidator": true
     },
@@ -76,6 +76,19 @@
       "UpstreamPathTemplate": "/gateway/Tracks/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
       "DownstreamPathTemplate": "/api/Tracks/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "trackservice",
+          "Port": 443
+        }
+      ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Tracks/permalink/{permalink}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Tracks/permalink/{permalink}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

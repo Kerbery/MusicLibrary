@@ -1,6 +1,10 @@
 ﻿const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const context = ["/gateway/Playlists", "/gateway/PlaylistItems"];
+const context = [
+  "/gateway/Playlists",
+  "/gateway/PlaylistItems",
+  "/gateway/Tracks",
+];
 
 module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {

@@ -86,6 +86,25 @@ namespace TrackService.Controllers
             return track.AsDTO();
         }
 
+        // GET api/<TracksController>/permalink/Id
+        [HttpGet("permalink/{permalink}")]
+        public async Task<ActionResult<GetTrackDTO>> GetByPermalinkAsync(string permalink)
+        {
+            if (string.IsNullOrEmpty(permalink))
+            {
+                return BadRequest();
+            }
+
+            var track = await _trackRepository.GetAsync(track => track.UrlId == permalink);
+
+            if (track == null)
+            {
+                return NotFound();
+            }
+
+            return track.AsDTO();
+        }
+
         // POST api/<TracksController>
         [HttpPost]
         public async Task<ActionResult<GetTrackDTO>> PostAsync([FromBody] CreateTrackDTO trackDTO)
