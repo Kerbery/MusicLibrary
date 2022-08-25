@@ -3,6 +3,13 @@
     padding-bottom: 20px;
 } */
 
+
+body, html {height: 100% !important;}
+
+content{
+    display: block;
+    height: 100vh;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -67,6 +74,7 @@ span{
 }
 
 .avatar {
+    border-radius: 50%;
     width: 30px;
     height: 30px;
     display: inline-block;
