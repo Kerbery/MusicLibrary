@@ -7,7 +7,7 @@ import AuthService from "./services/auth.service";
 import SignInCallback from "./components/SignInCallback/SignInCallback";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
-import PLaylists from "./components/Playlists/Playlists";
+import Playlists from "./components/Playlists/Playlists";
 import WrappedPlaylist from "./components/Playlist/WrappedPlaylist";
 import Home from "./components/Home/Home";
 import Uploads from "./components/Uploads/Uploads";
@@ -105,7 +105,7 @@ export default class App extends Component {
           <Route exact path="/signin-callback" element={<SignInCallback />} />
           <Route exact path="/Login" element={<Login />} />
           <Route exact path="/Register" element={<Register />} />
-          <Route path="Playlists" element={<PLaylists />} />
+          <Route path="Playlists" element={<Playlists />} />
           <Route path="Playlists/:playlistId" element={<WrappedPlaylist />} />
           <Route path="Uploads" element={<Uploads />} />
           <Route path="*" element={<NotFound />} />

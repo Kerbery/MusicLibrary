@@ -2,7 +2,7 @@ import React from "react";
 import GridItem from "../GridItem/GridItem";
 import PlaylistsService from "../../services/playlists.service";
 
-export default class PLaylists extends React.Component {
+export default class Playlists extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

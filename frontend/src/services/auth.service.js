@@ -67,7 +67,7 @@ class AuthService {
       .then((response) => {
         console.log("Userdata:", response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
-        debugger;
+
         this.isLoading = false;
         localStorage.setItem("isLoading", this.isLoading);
 

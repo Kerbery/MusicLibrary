@@ -2,7 +2,7 @@ import React from "react";
 import GridItem from "../GridItem/GridItem";
 import PlaylistsService from "../../services/playlists.service";
 
-export default class PLaylist extends React.Component {
+export default class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,11 +16,11 @@ export default class PLaylist extends React.Component {
     this.populatePlaylistData(this.state.playlistId);
   }
   render() {
-    let contents = this.state.loading ? "Loading" : this.renderPLaylistItems();
+    let contents = this.state.loading ? "Loading" : this.renderPlaylistItems();
     return contents;
   }
 
-  renderPLaylistItems() {
+  renderPlaylistItems() {
     var gridItemsData = this.state.playlist.items.map((item) => {
       var gridItemData = {};
       gridItemData.title = item.getTrackDTO.title;

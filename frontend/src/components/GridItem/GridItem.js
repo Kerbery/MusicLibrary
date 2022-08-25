@@ -13,7 +13,6 @@ export default class GridItem extends Component {
     backgroundImage = /http/.test(backgroundImage)
       ? `url(${backgroundImage})`
       : "";
-    console.log(backgroundImage);
     return (
       <div className="thumbnail col-md-2 col-sm-4">
         <div className="artwork">
