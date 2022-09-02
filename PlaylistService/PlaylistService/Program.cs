@@ -1,6 +1,8 @@
 using Common.MassTransit;
 using Common.MongoDB;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PlaylistService.Data;
 using PlaylistService.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,17 @@ builder.Services.AddMongo()
     .AddMongoRepository<PlaylistItem>("playlistItems")
     .AddMongoRepository<Track>("tracks")
     .AddMasstransitRabbitMq();
+
+var env = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER");
+
+var connString = env == "true" ? "DockerConnection" : "DefaultConnection";
+
+//var defaultConnString = builder.Configuration.GetConnectionString(connString);
+
+builder.Services.AddDbContext<PlaylistContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString(connString));
+});
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
