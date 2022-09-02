@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using TrackService.Models;
 using System;
-using System.Linq;
 using TrackService.DTOs.TrackDTOs;
-using TrackService.Extensions;
 using System.Threading.Tasks;
 using Common;
 using MassTransit;
 using Contracts;
+using AutoMapper;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,7 +29,7 @@ namespace TrackService.Controllers
                     UploadDate = DateTimeOffset.UtcNow,
                     ArtworkUrl = "automatic.jpg",
                     MediaUrl = "automatic.mp3",
-                    UrlId = "automatic"
+                    Permalink = "automatic"
                 },
                 new Track()
                 {
@@ -40,7 +40,7 @@ namespace TrackService.Controllers
                     UploadDate = DateTimeOffset.UtcNow,
                     ArtworkUrl = "let_the_sunhine.jpg",
                     MediaUrl = "let_the_sunhine.mp3",
-                    UrlId = "let_the_sunhine"
+                    Permalink = "let_the_sunhine"
                 },
                 new Track()
                 {
@@ -51,25 +51,27 @@ namespace TrackService.Controllers
                     UploadDate = DateTimeOffset.UtcNow,
                     ArtworkUrl = "la_tarde_se_ha_puesto_triste.jpg",
                     MediaUrl = "la_tarde_se_ha_puesto_triste.mp3",
-                    UrlId = "la_tarde_se_ha_puesto_triste"
+                    Permalink = "la_tarde_se_ha_puesto_triste"
                 },
             };
 
         private readonly IRepository<Track> _trackRepository;
 
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
 
-        public TracksController(IRepository<Track> trackRepository, IPublishEndpoint endpoint)
+        public TracksController(IRepository<Track> trackRepository, IPublishEndpoint endpoint, IMapper mapper)
         {
             _trackRepository = trackRepository;
             _publishEndpoint = endpoint;
+            _mapper = mapper;
         }
 
         // GET: api/<TracksController>
         [HttpGet]
         public async Task<IEnumerable<GetTrackDTO>> GetAsync()
         {
-            var tracks = (await _trackRepository.GetAllAsync()).Select(track => track.AsDTO());
+            var tracks = (await _trackRepository.GetAllAsync()).Select(t=>_mapper.Map<GetTrackDTO>(t));//.Select(track => track.AsDTO());
             return tracks;
         }
 
@@ -83,7 +85,8 @@ namespace TrackService.Controllers
                 return NotFound();
             }
 
-            return track.AsDTO();
+
+            return _mapper.Map<GetTrackDTO>(track);
         }
 
         // GET api/<TracksController>/permalink/Id
@@ -95,14 +98,14 @@ namespace TrackService.Controllers
                 return BadRequest();
             }
 
-            var track = await _trackRepository.GetAsync(track => track.UrlId == permalink);
+            var track = await _trackRepository.GetAsync(track => track.Permalink == permalink);
 
             if (track == null)
             {
                 return NotFound();
             }
 
-            return track.AsDTO();
+            return _mapper.Map<GetTrackDTO>(track);
         }
 
         // POST api/<TracksController>
@@ -115,17 +118,18 @@ namespace TrackService.Controllers
                 Duration = TimeSpan.FromSeconds(trackDTO.Duration),
                 Description = trackDTO.Description,
                 Title = trackDTO.Title,
-                UrlId = title,
+                Permalink = title,
                 ArtworkUrl = $"{title}.jpeg",
                 MediaUrl = $"{title}.mp3",
                 UploadDate = DateTimeOffset.UtcNow,
+                UserId = Guid.Parse("F32821A4-8810-41F1-9846-542690624EFF"),
             };
 
             await _trackRepository.CreateAsync(track);
 
-            await _publishEndpoint.Publish(new TrackCreated(track.Id, track.Title,track.UrlId, track.Duration, track.ArtworkUrl, track.Description, track.UploadDate));
+            await _publishEndpoint.Publish(_mapper.Map<TrackCreated>(track));
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, track.AsDTO());
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, _mapper.Map<GetTrackDTO>(track));
         }
 
         // PUT api/<TracksController>/5
@@ -146,11 +150,11 @@ namespace TrackService.Controllers
             existingTrack.Duration = TimeSpan.FromTicks(trackDTO.Duration);
             existingTrack.MediaUrl = trackDTO.MediaUrl;
             existingTrack.ArtworkUrl = trackDTO.ArtworkUrl;
-            existingTrack.UrlId = trackDTO.UrlId;
+            existingTrack.Permalink = trackDTO.UrlId;
 
             await _trackRepository.UpdateAsync(existingTrack);
 
-            await _publishEndpoint.Publish(new TrackUpdated(existingTrack.Id, existingTrack.Title, existingTrack.UrlId, existingTrack.Duration, existingTrack.ArtworkUrl, existingTrack.Description));
+            await _publishEndpoint.Publish(_mapper.Map<TrackUpdated>(existingTrack));
 
             return NoContent();
         }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using TrackService.Models;
 
 namespace TrackService
@@ -28,6 +29,8 @@ namespace TrackService
             services.AddMongo()
                     .AddMongoRepository<Track>("tracks")
                     .AddMasstransitRabbitMq();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers(options => 
             {

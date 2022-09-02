@@ -12,11 +12,12 @@ namespace TrackService.Extensions
                     Id: track.Id,
                     ArtworkUrl: track.ArtworkUrl,
                     MediaUrl: track.MediaUrl,
-                    UrlId: track.UrlId,
+                    Permalink: track.Permalink,
                     Title: track.Title,
                     Description: track.Description,
                     Duration: track.DurationSeconds,
-                    UploadDate: track.UploadDate
+                    UploadDate: track.UploadDate,
+                    UserId: track.UserId
                 );
         }
     }
