@@ -28,6 +28,7 @@ namespace TrackService
 
             services.AddMongo()
                     .AddMongoRepository<Track>("tracks")
+                    .AddMongoRepository<User>("users")
                     .AddMasstransitRabbitMq();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
