@@ -96,7 +96,19 @@ services:
       - "5004:80"
       - "5005:443"
 
+  userprovider:
+    image: ${DOCKER_REGISTRY-}userprovider
+    container_name: userprovider
+    hostname: userprovider
+    ports:
+      - "8090:80"
+      - "8095:443"
+    build:
+      context: .
+      dockerfile: UserProvider/Dockerfile
+
 volumes:
   mongodbdata:
   rabbitmqdata:
+
 
