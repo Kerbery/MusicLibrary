@@ -24,9 +24,13 @@ export default class Playlist extends React.Component {
     var gridItemsData = this.state.playlist.items.map((item) => {
       var gridItemData = {};
       gridItemData.title = item.getTrackDTO.title;
-      gridItemData.username = "Username";
+      gridItemData.user = {
+        username: item.getTrackDTO.user.userName,
+        permalink: item.getTrackDTO.user.permalink,
+      };
+
       gridItemData.artworkUrl = item.getTrackDTO?.artworkUrl || "";
-      gridItemData.url = `/Track/${item.getTrackDTO.urlId}`;
+      gridItemData.url = `/${item.getTrackDTO.user.permalink}/${item.getTrackDTO.permalink}`;
       return gridItemData;
     });
 

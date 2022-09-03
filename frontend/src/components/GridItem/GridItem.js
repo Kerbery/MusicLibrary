@@ -31,7 +31,9 @@ export default class GridItem extends Component {
             </Link>
           </div>
           <div className="track_uploader truncated">
-            <Link to={"/"}>{this.state.gridItemData.username}</Link>
+            <Link to={`/${this.state.gridItemData.user.permalink}/`}>
+              {this.state.gridItemData.user.username}
+            </Link>
           </div>
         </div>
       </div>
