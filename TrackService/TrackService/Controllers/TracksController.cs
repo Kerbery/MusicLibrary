@@ -113,16 +113,16 @@ namespace TrackService.Controllers
         public async Task<ActionResult<GetTrackDTO>> PostAsync([FromBody] CreateTrackDTO trackDTO)
         {
             string title = trackDTO.Title.Replace(" ", "_").ToLowerInvariant();
-            var track = new Track { 
-                Id = Guid.NewGuid(),
+            var track = new Track {
+                Id = trackDTO.Id,
                 Duration = TimeSpan.FromSeconds(trackDTO.Duration),
                 Description = trackDTO.Description,
                 Title = trackDTO.Title,
-                Permalink = title,
-                ArtworkUrl = $"{title}.jpeg",
-                MediaUrl = $"{title}.mp3",
+                Permalink = trackDTO.Permalink,
+                ArtworkUrl = trackDTO.ArtworkUrl,
+                MediaUrl = trackDTO.MediaUrl,
                 UploadDate = DateTimeOffset.UtcNow,
-                UserId = Guid.Parse("F32821A4-8810-41F1-9846-542690624EFF"),
+                UserId = trackDTO.UserId,
             };
 
             await _trackRepository.CreateAsync(track);
@@ -150,7 +150,7 @@ namespace TrackService.Controllers
             existingTrack.Duration = TimeSpan.FromTicks(trackDTO.Duration);
             existingTrack.MediaUrl = trackDTO.MediaUrl;
             existingTrack.ArtworkUrl = trackDTO.ArtworkUrl;
-            existingTrack.Permalink = trackDTO.UrlId;
+            existingTrack.Permalink = trackDTO.Permalink;
 
             await _trackRepository.UpdateAsync(existingTrack);
 

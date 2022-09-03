@@ -37,7 +37,7 @@ namespace PlaylistService.DTOs
                 (
                     Id: track.Id,
                     ArtworkUrl: track.ArtworkUrl,
-                    UrlId: track.Permalink,
+                    Permalink: track.Permalink,
                     Title: track.Title,
                     Description: track.Description,
                     Duration: track.DurationSeconds,

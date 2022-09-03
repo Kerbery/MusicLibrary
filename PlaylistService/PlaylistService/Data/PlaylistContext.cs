@@ -39,7 +39,7 @@ namespace PlaylistService.Data
 
             modelBuilder.Entity<Track>()
                 .HasOne(t => t.User)
-                .WithOne();
+                .WithMany();
 
             modelBuilder.Entity<User>().HasData(new User
             {

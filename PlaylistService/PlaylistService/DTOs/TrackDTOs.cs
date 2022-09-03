@@ -6,7 +6,7 @@
         string Description, 
         double Duration, 
         string ArtworkUrl, 
-        string UrlId, 
-        DateTimeOffset UploadDate,
+        string Permalink, 
+        DateTimeOffset UploadDate, 
         GetUserDTO User);
 }

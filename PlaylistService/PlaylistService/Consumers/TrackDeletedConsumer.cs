@@ -1,8 +1,6 @@
-﻿using Common;
-using Contracts;
+﻿using Contracts;
 using MassTransit;
 using PlaylistService.Data;
-using PlaylistService.Models;
 
 namespace PlaylistService.Consumers
 {
