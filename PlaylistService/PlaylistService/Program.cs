@@ -4,10 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PlaylistService.Data;
 using PlaylistService.Models;
+using PlaylistService.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services
+    .AddScoped<IPlaylistLogic, PlaylistLogic>()
+    .AddScoped<IPlaylistItemsLogic, PlaylistItemsLogic>();
 
 builder.Services.AddMongo()
     .AddMongoRepository<Playlist>("playlists")

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PlaylistService.Data;
-using PlaylistService.DTOs;
 using PlaylistService.DTOs.PlaylistDTOs;
-using PlaylistService.Models;
+using PlaylistService.Business;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,26 +11,18 @@ namespace PlaylistService.Controllers
     //[Authorize]
     public class PlaylistsController : ControllerBase
     {
-        private readonly PlaylistContext context;
+        private readonly IPlaylistLogic _playlistService;
 
-        public PlaylistsController(PlaylistContext context)
+        public PlaylistsController(IPlaylistLogic playlistService)
         {
-            this.context = context;
+            _playlistService = playlistService;
         }
 
         // GET: api/<PlaylistsController>/?userId={userId}
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId )
         {
-            var playlists = await context.Playlists
-                .Include(pl => pl.User)
-                .Include(pl => pl.Items)
-                .ThenInclude(x=>x.Track)
-                .ThenInclude(y=>y.User)
-                .Select(pl => pl.AsDTO())
-                .ToListAsync();
-
-            
+            var playlists = await _playlistService.GetUserPlaylists(userId);            
 
             return Ok(playlists);
         }
@@ -42,58 +31,25 @@ namespace PlaylistService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPlaylistDTO>> GetAsync(Guid id)
         {
-            var playlist = await context.Playlists
-                .Include(pl => pl.User)
-                .Include(pl => pl.Items)
-                .ThenInclude(x => x.Track)
-                .ThenInclude(y => y.User)
-                .Where(x=>x.Id == id)
-                .Select(pl => pl.AsDTO())
-                .SingleOrDefaultAsync();
+            var playlist = await _playlistService.GetPlaylist(id);
 
             return Ok(playlist);
         }
 
         // POST api/<PlaylistsController>
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] CreatePLaylistDTO createPLaylistDTO)
+        public async Task<ActionResult> PostAsync([FromBody] CreatePlaylistDTO createPLaylistDTO)
         {
-            Playlist playlist = new()
-            {
-                Id = Guid.NewGuid(),
-                Title = createPLaylistDTO.Title,
-                Description = createPLaylistDTO.Description,
-                CreatedDate = DateTimeOffset.UtcNow,
-                UserId = Guid.Parse("e6f8d7d7-76d2-4e8e-8371-ba8d732e94e9"),
-                Kind = PlaylistKind.Likes
-            };
+            var savedPlaylist = await _playlistService.CreatePlaylist(createPLaylistDTO);
 
-            context.Playlists.Add(playlist);
-            await context.SaveChangesAsync();
-
-
-            var savedPlaylist = await context.Playlists.Include(pl=>pl.User).SingleOrDefaultAsync(pl=>pl.Id == playlist.Id);
-
-            return CreatedAtAction( nameof(GetAsync), new { id = playlist.Id}, savedPlaylist.AsDTO());
-
-
+            return CreatedAtAction( nameof(GetAsync), new { id = savedPlaylist.PlaylistId}, savedPlaylist);
         }
 
         // PUT api/<PlaylistsController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAsync(Guid id, [FromBody] UpdatePlaylistDTO updatePlaylistDTO)
         {
-            var existingPlaylist = await context.Playlists.FindAsync(id);
-
-            if (existingPlaylist == null)
-            {
-                return NotFound();
-            }
-
-            existingPlaylist.Title = updatePlaylistDTO.Title;
-            existingPlaylist.Description = updatePlaylistDTO.Description;
-
-            await context.SaveChangesAsync();
+            await _playlistService.UpdatePlaylist(id, updatePlaylistDTO);
 
             return Ok();
         }
@@ -102,15 +58,7 @@ namespace PlaylistService.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            var existingPlaylist = await context.Playlists.FindAsync(id);
-
-            if (existingPlaylist == null)
-            {
-                return NotFound();
-            }
-
-            context.Playlists.Remove(existingPlaylist);
-            await context.SaveChangesAsync();
+            await _playlistService.DeletePlaylist(id);
 
             return Ok();
         }

@@ -11,7 +11,7 @@ namespace PlaylistService.DTOs.PlaylistDTOs
         DateTimeOffset CreatedDate,
         GetUserDTO User,
         IEnumerable<GetPlaylistItemDTO> Items);
-    public record CreatePLaylistDTO([Required] string Title, string Description);
+    public record CreatePlaylistDTO([Required] string Title, string Description);
     public record UpdatePlaylistDTO(Guid PLaylistId, [Required] string Title, string Description);
     public record RemovePlaylistDTO(Guid PlaylistId);
 }
