@@ -2,6 +2,7 @@
 using PlaylistService.DTOs.PlaylistDTOs;
 using PlaylistService.Business;
 using PlaylistService.DTOs.Paging;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,7 +24,18 @@ namespace PlaylistService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId, [FromQuery] PagingParameters pagingParameters)
         {
-            var playlists = await _playlistService.GetUserPlaylists(userId, pagingParameters);            
+            var playlists = await _playlistService.GetUserPlaylists(userId, pagingParameters);
+
+            var metadata = new
+            {
+                playlists.TotalCount,
+                playlists.PageSize,
+                playlists.CurrentPage,
+                playlists.TotalPages,
+                playlists.HasNext,
+                playlists.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
             return Ok(playlists);
         }
