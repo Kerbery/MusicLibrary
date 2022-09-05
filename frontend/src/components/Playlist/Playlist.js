@@ -1,4 +1,5 @@
 import React from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import GridItem from "../GridItem/GridItem";
 import PlaylistsService from "../../services/playlists.service";
 
@@ -6,22 +7,34 @@ export default class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playlist: {},
+      playlist: { title: "...", description: "" },
+      playlistItems: [],
       loading: true,
       playlistId: this.props.playlistId,
+      pageNumber: 1,
     };
   }
 
   componentDidMount() {
-    this.populatePlaylistData(this.state.playlistId);
+    PlaylistsService.getPlaylist(this.state.playlistId)
+      .then((response) => {
+        this.setState({
+          playlist: {
+            title: response.data.title,
+            description: response.data.description,
+          },
+        });
+      })
+      .then(() => this.fetchPlaylistItems());
   }
+
   render() {
     let contents = this.state.loading ? "Loading" : this.renderPlaylistItems();
     return contents;
   }
 
   renderPlaylistItems() {
-    var gridItemsData = this.state.playlist.items.map((item) => {
+    var gridItemsData = this.state.playlistItems.map((item) => {
       var gridItemData = {};
       gridItemData.title = item.getTrackDTO.title;
       gridItemData.user = {
@@ -38,32 +51,34 @@ export default class Playlist extends React.Component {
       <div className="container body-content">
         <h4 className="category_title">{this.state.playlist.title}</h4>
         <div className="col-md-12">
-          {gridItemsData.map((gridItemData, i) => (
-            <GridItem gridItemData={gridItemData} key={`track${i}`} />
-          ))}
+          <InfiniteScroll
+            dataLength={this.state.playlistItems.length}
+            next={this.fetchPlaylistItems.bind(this)}
+            hasMore={this.state.hasMore}
+            loader={<h4>Loading...</h4>}
+          >
+            {gridItemsData.map((gridItemData, i) => (
+              <GridItem gridItemData={gridItemData} key={`track${i}`} />
+            ))}
+          </InfiniteScroll>
         </div>
       </div>
     );
   }
 
-  populatePlaylistData(playlistId) {
-    PlaylistsService.getPlaylistContent(playlistId).then(
+  fetchPlaylistItems() {
+    let { playlistId, pageNumber } = this.state;
+    PlaylistsService.getPlaylistItems(playlistId, pageNumber).then(
       (response) => {
+        let pagingMetadata = JSON.parse(response.headers["x-pagination"]);
         this.setState({
-          playlist: response.data,
+          playlistItems: [...this.state.playlistItems, ...response.data],
           loading: false,
-          playlistId: this.state.playlistId,
+          hasMore: pagingMetadata.HasNext,
+          pageNumber: this.state.pageNumber + 1,
         });
       },
-      (error) => {
-        console.log(
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-            error.message ||
-            error.toString()
-        );
-      }
+      (error) => console.log(error)
     );
   }
 }

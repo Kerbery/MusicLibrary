@@ -1,6 +1,7 @@
 import React from "react";
 import GridItem from "../GridItem/GridItem";
 import PlaylistsService from "../../services/playlists.service";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default class Playlists extends React.Component {
   constructor(props) {
@@ -8,18 +9,18 @@ export default class Playlists extends React.Component {
     this.state = {
       playlists: [],
       loading: true,
+      pageNumber: 1,
     };
   }
 
   componentDidMount() {
-    this.populatePLaylistsData();
+    this.fetchPlaylists();
   }
   render() {
     let contents = this.state.loading ? "Loading" : this.renderPLaylistItems();
     return contents;
   }
   renderPLaylistItems() {
-    console.log(this.state.playlists);
     var gridItemsData = this.state.playlists.map((playlist) => {
       var gridItemData = {};
       gridItemData.title = playlist.title;
@@ -37,30 +38,34 @@ export default class Playlists extends React.Component {
       <div className="container body-content">
         <h4 className="category_title">Playlists</h4>
         <div className="col-md-12">
-          {gridItemsData.map((gridItemData, i) => (
-            // <div className="list_item" key={`track${i}`}>
-            <GridItem gridItemData={gridItemData} key={`track${i}`} />
-            // </div>
-          ))}
+          <InfiniteScroll
+            next={this.fetchPlaylists.bind(this)}
+            dataLength={this.state.playlists.length}
+            hasMore={this.state.hasMore}
+            loader={<h4>Loading...</h4>}
+          >
+            {gridItemsData.map((gridItemData, i) => (
+              <GridItem gridItemData={gridItemData} key={`track${i}`} />
+            ))}
+          </InfiniteScroll>
         </div>
       </div>
     );
   }
 
-  populatePLaylistsData() {
-    PlaylistsService.getAllPlaylists().then(
+  fetchPlaylists() {
+    let { userId = null, pageNumber } = this.state;
+    PlaylistsService.getPlaylists(userId, pageNumber).then(
       (response) => {
-        this.setState({ playlists: response.data, loading: false });
+        let pagingMetadata = JSON.parse(response.headers["x-pagination"]);
+        this.setState({
+          playlists: [...this.state.playlists, ...response.data],
+          loading: false,
+          hasMore: pagingMetadata.HasNext,
+          pageNumber: this.state.pageNumber + 1,
+        });
       },
-      (error) => {
-        console.log(
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-            error.message ||
-            error.toString()
-        );
-      }
+      (error) => console.log(error)
     );
   }
 }
