@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistService.DTOs.PlaylistDTOs;
 using PlaylistService.Business;
+using PlaylistService.DTOs.Paging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,9 +21,9 @@ namespace PlaylistService.Controllers
 
         // GET: api/<PlaylistsController>/?userId={userId}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId )
+        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId, [FromQuery] PagingParameters pagingParameters)
         {
-            var playlists = await _playlistService.GetUserPlaylists(userId);            
+            var playlists = await _playlistService.GetUserPlaylists(userId, pagingParameters);            
 
             return Ok(playlists);
         }

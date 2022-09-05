@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlaylistService.Business;
+using PlaylistService.DTOs.Paging;
 using PlaylistService.DTOs.PlaylistItemDTOs;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,9 +22,20 @@ namespace PlaylistService.Controllers
 
         // GET: api/<PlaylistItemsController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPlaylistItemDTO>>> GetPlaylistItemsAsync([FromQuery] Guid playlistId)
+        public async Task<ActionResult<IEnumerable<GetPlaylistItemDTO>>> GetPlaylistItemsAsync([FromQuery] Guid playlistId, [FromQuery] PagingParameters pagingParameters)
         {
-            var playlistItems = await _playlistItemsLogic.GetPlaylistItems(playlistId);
+            var playlistItems = await _playlistItemsLogic.GetPlaylistItems(playlistId, pagingParameters);
+
+            var metadata = new
+            {
+                playlistItems.TotalCount,
+                playlistItems.PageSize,
+                playlistItems.CurrentPage,
+                playlistItems.TotalPages,
+                playlistItems.HasNext,
+                playlistItems.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
             return Ok(playlistItems);
         }

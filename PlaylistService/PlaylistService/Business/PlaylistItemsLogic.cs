@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlaylistService.Data;
 using PlaylistService.DTOs;
+using PlaylistService.DTOs.Paging;
 using PlaylistService.DTOs.PlaylistItemDTOs;
 using PlaylistService.Models;
 
@@ -15,15 +16,18 @@ namespace PlaylistService.Business
             _context = context;
         }
 
-        public async Task<IEnumerable<GetPlaylistItemDTO>> GetPlaylistItems(Guid playlistId)
+        public async Task<PagedList<GetPlaylistItemDTO>> GetPlaylistItems(Guid playlistId, PagingParameters pagingParameters)
         {
-            var playlistItems = await _context.PlaylistItems
+            var querry = _context.PlaylistItems
                 .Where(pi => pi.PlaylistId == playlistId)
                 .Include(pi => pi.Track)
-                .Select(pi => pi.AsDTO())
-                .ToListAsync();
+                .ThenInclude(t => t.User)
+                .Select(pi => pi.AsDTO());
 
-            return playlistItems;
+
+            return await PagedList<GetPlaylistItemDTO>.ToPagedList(querry, 
+                pagingParameters.PageNumber,
+                pagingParameters.PageSize);
         }
 
         public async Task<GetPlaylistItemDTO> GetPlaylistItem(Guid id)
