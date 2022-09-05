@@ -70,7 +70,7 @@ export default class Track extends React.Component {
             </div>
 
             <audio controls className="col-md-12">
-              <source src={`/${track.mediaUrl}`} type="audio/mpeg" />
+              <source src={track.mediaUrl} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
           </div>
