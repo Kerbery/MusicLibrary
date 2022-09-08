@@ -9,6 +9,8 @@ using MassTransit;
 using Contracts;
 using AutoMapper;
 using System.Linq;
+using System.Linq.Expressions;
+using TrackService.Extensions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -56,22 +58,52 @@ namespace TrackService.Controllers
             };
 
         private readonly IRepository<Track> _trackRepository;
+        private readonly IRepository<User> _userRepository;
 
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
 
-        public TracksController(IRepository<Track> trackRepository, IPublishEndpoint endpoint, IMapper mapper)
+        public TracksController(IRepository<Track> trackRepository, IPublishEndpoint endpoint, IMapper mapper, IRepository<User> userRepository)
         {
             _trackRepository = trackRepository;
             _publishEndpoint = endpoint;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         // GET: api/<TracksController>
         [HttpGet]
-        public async Task<IEnumerable<GetTrackDTO>> GetAsync()
+        public async Task<IEnumerable<GetTrackDTO>> GetAsync([FromQuery] Guid userId, [FromQuery] string userPermalink)
         {
-            var tracks = (await _trackRepository.GetAllAsync()).Select(t=>_mapper.Map<GetTrackDTO>(t));//.Select(track => track.AsDTO());
+            Expression<Func<Track, bool>> filter = t => true;
+
+            User user = null;
+
+            if (userId != Guid.Empty)
+            {
+                filter = t => t.UserId == userId;
+                user = (await _userRepository.GetAsync(u => u.Id == userId));
+            }
+            else if (!string.IsNullOrEmpty(userPermalink))
+            {
+                user = (await _userRepository.GetAsync(u => u.Permalink == userPermalink));
+                filter = t => t.UserId == user.Id;
+            }
+
+
+            var tracks = (await _trackRepository.GetAllAsync(filter))
+                .OrderBy(t => t.UploadDate)
+                .Select(t => new GetTrackDTO(
+                    t.Id, 
+                    t.Title, 
+                    t.Description, 
+                    t.DurationSeconds, 
+                    t.MediaUrl, 
+                    t.ArtworkUrl, 
+                    t.Permalink, 
+                    t.UploadDate, 
+                    t.UserId, 
+                    user));//.Select(track => track.AsDTO());
             return tracks;
         }
 
@@ -85,8 +117,9 @@ namespace TrackService.Controllers
                 return NotFound();
             }
 
+            var user = (await _userRepository.GetAsync(u => u.Id == track.UserId));
 
-            return _mapper.Map<GetTrackDTO>(track);
+            return track.AsDTO(user);
         }
 
         // GET api/<TracksController>/permalink/Id
@@ -105,7 +138,9 @@ namespace TrackService.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<GetTrackDTO>(track);
+            var user = (await _userRepository.GetAsync(u => u.Id == track.UserId));
+
+            return track.AsDTO(user);
         }
 
         // POST api/<TracksController>
@@ -129,7 +164,8 @@ namespace TrackService.Controllers
 
             await _publishEndpoint.Publish(_mapper.Map<TrackCreated>(track));
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, _mapper.Map<GetTrackDTO>(track));
+            var user = (await _userRepository.GetAsync(u => u.Id == track.UserId));
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = track.Id }, track.AsDTO(user));
         }
 
         // PUT api/<TracksController>/5

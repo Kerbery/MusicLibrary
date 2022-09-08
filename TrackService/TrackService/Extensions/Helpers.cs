@@ -5,7 +5,7 @@ namespace TrackService.Extensions
 {
     public static class Helpers
     {
-        public static GetTrackDTO AsDTO(this Track track)
+        public static GetTrackDTO AsDTO(this Track track, User user)
         {
             return new GetTrackDTO
                 (
@@ -17,7 +17,8 @@ namespace TrackService.Extensions
                     Description: track.Description,
                     Duration: track.DurationSeconds,
                     UploadDate: track.UploadDate,
-                    UserId: track.UserId
+                    UserId: track.UserId,
+                    User: user
                 );
         }
     }
