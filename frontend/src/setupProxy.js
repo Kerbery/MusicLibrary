@@ -3,6 +3,7 @@
 const context = [
   "/gateway/Playlists",
   "/gateway/PlaylistItems",
+  "/gateway/LikedTracks",
   "/gateway/Tracks",
 ];
 

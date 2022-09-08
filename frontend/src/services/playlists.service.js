@@ -4,6 +4,7 @@ import { getTrackDataFromItem, getPlaylistData } from "./mapping.helpers";
 
 const PLAYLISTS_API_URL = "/gateway/Playlists";
 const PLAYLIST_ITEMS_API_URL = "/gateway/PlaylistItems";
+const LIKED_TRACKS_API_URL = "/gateway/LikedTracks";
 
 class PlaylistService {
   async getPlaylists(userPermalink, PageNumber = 1, PageSize = 24) {
@@ -45,6 +46,28 @@ class PlaylistService {
     return axios.get(path, {
       headers: { Authorization: `Bearer ${token}` },
     });
+  }
+
+  async getLikes(userPermalink, PageNumber = 1, PageSize = 24) {
+    let token = await AuthService.getAccessToken();
+    let params = new URLSearchParams({
+      userPermalink,
+      PageNumber,
+      PageSize,
+    });
+    return axios
+      .get(`${LIKED_TRACKS_API_URL}?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(
+        (response) => {
+          let paging = JSON.parse(response.headers["x-pagination"]);
+          let items = response.data.map((item) => getTrackDataFromItem(item));
+
+          return { paging, items };
+        },
+        (error) => console.log(error)
+      );
   }
 }
 export default new PlaylistService();

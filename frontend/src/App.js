@@ -87,6 +87,15 @@ export default class App extends Component {
                   />
                 }
               />
+              <Route
+                path="likes"
+                element={
+                  <WrappedGridPlaylist
+                    page="likes"
+                    next={PlaylistService.getLikes}
+                  />
+                }
+              />
             </Route>
 
             <Route path=":user/:track" element={<WrappedTrack />} />
