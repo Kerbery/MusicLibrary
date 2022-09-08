@@ -60,6 +60,53 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
+      "UpstreamPathTemplate": "/gateway/LikedTracks",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/LikedTracks",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "playlistservice",
+          "Port": 443
+        }
+      ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/LikedTracks/Like",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/LikedTracks",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "playlistservice",
+          "Port": 443
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/LikedTracks/Unlike",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/LikedTracks",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "playlistservice",
+          "Port": 443
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
       "UpstreamPathTemplate": "/gateway/Tracks",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "POST" ],
       "DownstreamPathTemplate": "/api/Tracks",

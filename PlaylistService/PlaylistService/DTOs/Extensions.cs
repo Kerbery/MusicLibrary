@@ -1,4 +1,5 @@
-﻿using PlaylistService.DTOs.PlaylistDTOs;
+﻿using PlaylistService.DTOs.LikedTrackDTOs;
+using PlaylistService.DTOs.PlaylistDTOs;
 using PlaylistService.DTOs.PlaylistItemDTOs;
 using PlaylistService.DTOs.TrackDTOs;
 using PlaylistService.Models;
@@ -56,6 +57,15 @@ namespace PlaylistService.DTOs
                     Permalink: user.Permalink,
                     AvatarUrl: user.AvatarUrl
                 );
+        }
+
+        public static GetLikedTrackDTO AsDTO(this LikedTrack likedTrack) 
+        {
+            return new GetLikedTrackDTO
+            (
+                CreatedDate: likedTrack.CreatedDate,
+                Track: likedTrack.Track.AsDTO()
+            );
         }
     }
 }

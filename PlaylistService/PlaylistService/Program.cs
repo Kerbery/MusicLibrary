@@ -12,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddScoped<IPlaylistLogic, PlaylistLogic>()
-    .AddScoped<IPlaylistItemsLogic, PlaylistItemsLogic>();
+    .AddScoped<IPlaylistItemsLogic, PlaylistItemsLogic>()
+    .AddScoped<ILikedTrackLogic, LikedTrackLogic>();
 
 builder.Services.AddMongo()
     .AddMongoRepository<Playlist>("playlists")
