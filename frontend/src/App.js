@@ -1,17 +1,19 @@
 import React, { Component } from "react";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./Site.css";
 
 import AuthService from "./services/auth.service";
+import PlaylistService from "./services/playlists.service";
+import TrackService from "./services/track.service";
 
 import SignInCallback from "./components/SignInCallback/SignInCallback";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
-import Playlists from "./components/Playlists/Playlists";
+import WrappedProfile from "./components/Profile/WrappedProfile";
+import WrappedGridPlaylist from "./components/GridPlaylist/WrappedGridPlaylist";
 import WrappedPlaylist from "./components/Playlist/WrappedPlaylist";
 import WrappedTrack from "./components/Track/WrappedTrack";
 import Home from "./components/Home/Home";
-import Uploads from "./components/Uploads/Uploads";
 import NotFound from "./components/NotFound/NotFound";
 import Nav from "./components/Nav/Nav";
 
@@ -61,11 +63,33 @@ export default class App extends Component {
             <Route exact path="/signin-callback" element={<SignInCallback />} />
             <Route exact path="/Login" element={<Login />} />
             <Route exact path="/Register" element={<Register />} />
-            <Route path="Uploads" element={<Uploads />} />
-            <Route path="Playlists" element={<Playlists />} />
-            <Route path="Playlists/:playlistId" element={<WrappedPlaylist />} />
-            <Route path="track/:id" element={<WrappedTrack />} />
-            <Route path=":user/:id" element={<WrappedTrack />} />
+            <Route
+              path=":user/playlists/:playlistId"
+              element={<WrappedPlaylist />}
+            />
+
+            <Route path=":user" element={<WrappedProfile page="profile" />}>
+              <Route
+                path="tracks"
+                element={
+                  <WrappedGridPlaylist
+                    page="tracks"
+                    next={TrackService.getTracks}
+                  />
+                }
+              />
+              <Route
+                path="playlists"
+                element={
+                  <WrappedGridPlaylist
+                    page="playlists"
+                    next={PlaylistService.getPlaylists}
+                  />
+                }
+              />
+            </Route>
+
+            <Route path=":user/:track" element={<WrappedTrack />} />
             <Route path="*" element={<NotFound />} />
             <Route path="not-found" element={<NotFound />} />
           </Routes>

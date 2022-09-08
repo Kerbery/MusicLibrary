@@ -1,7 +1,8 @@
-﻿/* body {
-    padding-top: 50px;
+﻿body {
+    padding-top: 62px;
     padding-bottom: 20px;
-} */
+    overflow-y: overlay;
+} 
 
 
 body, html {height: 100% !important;}
@@ -12,6 +13,7 @@ content{
 }
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    padding-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -199,4 +201,31 @@ label {
 
 .opacity-transition {
     transition: opacity .2s linear;
+}
+
+.profileTitle{
+    /* display: inline-block; */
+    color: #fff;
+    line-height: 37px;
+    background-color: rgba(0, 0, 0, .8);
+    padding: 4px 7px;
+}
+
+.profileHeader{
+    /* display: inline-block; */
+    height: 260px;
+    background: linear-gradient(315deg, rgb(230, 132, 110) 0%, rgb(142, 132, 133) 100%);
+}
+
+.profileHeaderAvatar{
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    margin: 30px; 
+    background-image: linear-gradient(135deg, #e6846e, #8e8485);
+    /* display: inline-block; */
+}
+
+.nav-item .nav-link.active {
+    border-bottom: 2px solid orangered;
 }

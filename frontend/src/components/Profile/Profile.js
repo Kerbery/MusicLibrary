@@ -1,36 +1,51 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
+import { NavLink, Outlet } from "react-router-dom";
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
-      currentUser: AuthService.getCurrentUser(),
+      userId: this.props.user,
+      page: this.props.page,
     };
   }
+
   render() {
-    const { currentUser } = this.state;
+    const { userId } = this.state;
+    const pages = {
+      Profile: "",
+      Tracks: "/tracks",
+      Likes: "/likes",
+      Playlists: "/playlists",
+    };
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>
-            <strong>{currentUser.username}</strong> Profile
-          </h3>
+        <header className=" profileHeader d-flex">
+          <span className="profileHeaderAvatar"></span>
+          <div className="align-self-start p-2">
+            <h2 className="profileTitle">{userId}</h2>
+          </div>
         </header>
-        <p>
-          <strong>Token:</strong> {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-        </p>
-        <p>
-          <strong>Id:</strong> {currentUser.id}
-        </p>
-        <p>
-          <strong>Email:</strong> {currentUser.email}
-        </p>
-        <strong>Authorities:</strong>
-        <ul>
-          {currentUser.roles &&
-            currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
-        </ul>
+
+        <nav className="navbar navbar-expand navbar-light bg-light">
+          <ul className="navbar-nav">
+            {Object.keys(pages).map((page, i) => {
+              return (
+                <li className="nav-item" key={i}>
+                  <NavLink
+                    to={`/${userId}${pages[page]}`}
+                    end={pages[page] === ""}
+                    className="nav-link"
+                  >
+                    {page}
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <Outlet />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AuthService from "../../services/auth.service";
 
 export default class Nav extends React.Component {
   constructor(props) {
@@ -8,11 +9,10 @@ export default class Nav extends React.Component {
   }
 
   render() {
-    var pages = ["Home", "Playlists", "Uploads"];
-    let { isLoggedIn, user, logIn, logOut } = this.props;
+    let { isLoggedIn, logIn } = this.props;
 
     return (
-      <nav className="navbar navbar-dark bg-dark justify-content-between">
+      <nav className="navbar fixed-top navbar-dark bg-dark justify-content-between">
         <div className="container">
           <a className="navbar-brand" href="/">
             MusicLibrary
@@ -20,41 +20,7 @@ export default class Nav extends React.Component {
           <div className="navbar-expand">
             <ul className="nav navbar-nav">
               {isLoggedIn ? (
-                <li className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle"
-                    to="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <span className="img-circle avatar" alt="&nbsp;"></span>
-                    {` ${user.given_name} `}
-                  </Link>
-                  <ul className="dropdown-menu">
-                    {pages.map((category, i) => (
-                      <li key={i}>
-                        <Link className=" dropdown-item" to={`/${category}`}>
-                          {category}
-                        </Link>
-                      </li>
-                    ))}
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      <Link
-                        to=""
-                        className="dropdown-item"
-                        onClick={() =>
-                          logOut({ returnTo: window.location.origin })
-                        }
-                      >
-                        LogOut
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
+                this.renderUserDropdown()
               ) : (
                 <div className="navbar-nav ml-auto">
                   <li className="nav-item">
@@ -73,6 +39,56 @@ export default class Nav extends React.Component {
           </div>
         </div>
       </nav>
+    );
+  }
+
+  renderUserDropdown() {
+    const pages = {
+      Profile: "",
+      Tracks: "/tracks",
+      Likes: "/likes",
+      Playlists: "/playlists",
+    };
+    let { user, logOut } = this.props;
+    let userId = AuthService.user.preferred_username;
+
+    return (
+      <li className="nav-item dropdown">
+        <Link
+          className="nav-link dropdown-toggle"
+          to="#"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span className="img-circle avatar" alt="&nbsp;"></span>
+          {` ${user.given_name} `}
+        </Link>
+        <ul className="dropdown-menu">
+          {Object.keys(pages).map((category, i) => (
+            <li key={i}>
+              <Link
+                className="dropdown-item"
+                to={`/${userId}${pages[category]}`}
+              >
+                {category}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <hr className="dropdown-divider" />
+          </li>
+          <li>
+            <Link
+              to=""
+              className="dropdown-item"
+              onClick={() => logOut({ returnTo: window.location.origin })}
+            >
+              LogOut
+            </Link>
+          </li>
+        </ul>
+      </li>
     );
   }
 }
