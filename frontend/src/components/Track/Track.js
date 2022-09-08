@@ -5,23 +5,26 @@ import { Link } from "react-router-dom";
 export default class Track extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { track: undefined, isLoading: true };
+    this.state = {
+      permalink: this.props.permalink,
+      track: undefined,
+      isLoading: true,
+    };
   }
   componentDidMount() {
     this.populateTrackData();
   }
 
   populateTrackData() {
-    TrackService.getTrackInfo(this.props.id).then((response) => {
+    TrackService.getTrackInfo(this.state.permalink).then((response) => {
       this.setState({ track: response.data, isLoading: false });
     });
   }
 
   render() {
-    let { id } = this.props;
-    let { track, isLoading } = this.state;
+    let { isLoading, permalink } = this.state;
 
-    return isLoading ? `Loading "${id}"...` : this.renderTrackPage();
+    return isLoading ? `Loading "${permalink}"...` : this.renderTrackPage();
   }
 
   renderTrackPage() {
