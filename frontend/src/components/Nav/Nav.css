@@ -1,0 +1,11 @@
+.avatar {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-image: linear-gradient(135deg, #70929c, #8e8485);
+}
+
+span {
+  vertical-align: middle;
+}

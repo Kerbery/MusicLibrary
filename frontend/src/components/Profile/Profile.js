@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import "./Profile.css";
 
 export default class Profile extends Component {
   constructor(props) {

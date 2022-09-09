@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import LazyBackground from "../LazyBackground/LazyBackGround";
-// import "./GridItem.css";
-// import "./Thumbnails.css";
+import "./GridItem.css";
 
 export default class GridItem extends Component {
   constructor(props) {

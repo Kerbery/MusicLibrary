@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Route, Routes } from "react-router-dom";
-import "./Site.css";
 
 import AuthService from "./services/auth.service";
 import PlaylistService from "./services/playlists.service";
