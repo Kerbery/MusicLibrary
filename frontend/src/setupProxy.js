@@ -5,6 +5,7 @@ const context = [
   "/gateway/PlaylistItems",
   "/gateway/LikedTracks",
   "/gateway/Tracks",
+  "/gateway/Users",
 ];
 
 module.exports = function (app) {

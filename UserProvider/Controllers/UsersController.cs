@@ -32,6 +32,19 @@ namespace UserProvider.Controllers
         }
 
         // GET api/<UsersController>/5
+        [HttpGet("permalink/{permalink}")]
+        public async Task<ActionResult<GetUserDTO>> GetAsync(string permalink)
+        {
+            var user = await _repository.GetAsync((user)=>user.Permalink==permalink);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return user.AsDTO();
+        }
+
+        // GET api/<UsersController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GetUserDTO>> GetAsync(Guid id)
         {
