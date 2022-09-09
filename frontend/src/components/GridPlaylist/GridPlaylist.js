@@ -1,6 +1,7 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import GridItem from "../GridItem/GridItem";
+import Spinner from "../Spinner/Spinner";
 
 export default class GridPlaylist extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class GridPlaylist extends React.Component {
   componentDidMount() {
     this.fetchMoreItems();
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.page !== prevProps.page) {
       this.setState(
@@ -38,11 +40,7 @@ export default class GridPlaylist extends React.Component {
             dataLength={this.state.items.length}
             next={this.fetchMoreItems.bind(this)}
             hasMore={this.state.hasMore}
-            loader={
-              <div className="spinner-border m-5" role="status">
-                <span className="sr-only" />
-              </div>
-            }
+            loader={<Spinner />}
           >
             {this.state.items.map((items, i) => (
               <GridItem gridItemData={items} key={`track${i}`} />
