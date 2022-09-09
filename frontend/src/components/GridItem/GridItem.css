@@ -34,9 +34,13 @@
   text-align: right;
 }
 
-.track_title,
-.track_uploader {
-  font-family: "Helvetica", "Arial", sans-serif;
+.track_uploader,
+.track_title {
+  font: 12px/1.4 Lucida Grande, Lucida Sans Unicode, Lucida Sans, Garuda,
+    Verdana, Tahoma, sans-serif;
+  font-family: Interstate, Lucida Grande, Lucida Sans Unicode, Lucida Sans,
+    Garuda, Verdana, Tahoma, sans-serif;
+  font-weight: 100;
 }
 
 .truncated {
@@ -46,32 +50,34 @@
 }
 
 .track_title {
-  color: #999;
   font-size: 14px;
 }
 
 .track_uploader {
-  color: #aaa;
   font-size: 12px;
   word-break: normal;
 }
 
-.track_title a:link,
-.track_title a:active {
-  color: #aaa;
+a {
+  text-decoration: none;
 }
 
-.track_title a:hover,
+.track_title a:link,
+.track_title a:active,
 .track_title a:visited {
-  color: #777;
+  color: #333;
+}
+
+.track_title a:hover {
+  color: #000;
 }
 
 .track_uploader a:link,
-.track_uploader a:active {
-  color: #888;
+.track_uploader a:active,
+.track_uploader a:visited {
+  color: #999;
 }
 
-.track_uploader a:hover,
-.track_uploader a:visited {
-  color: #555;
+.track_uploader a:hover {
+  color: #333;
 }
