@@ -1,31 +1,36 @@
 import { Component } from "react";
 
 export default class LazyBackground extends Component {
-  state = { src: null };
+  state = { loadedSrc: null };
 
   componentDidMount() {
     const { src } = this.props;
-
     const imageLoader = new Image();
     imageLoader.src = src;
 
     imageLoader.onload = () => {
-      this.setState({ src });
+      this.setState({ loadedSrc: src });
     };
   }
 
   render() {
-    let style = {};
-    let className = "placeholder-art";
-    if (this.state.src) {
-      style = {
-        backgroundImage: `url(${this.state.src})`,
-        opacity: 1,
-      };
+    let { className, src: propSrc, children } = this.props;
+    let { loadedSrc } = this.state;
+    let style = { opacity: 1 };
+
+    if (loadedSrc) {
+      style.backgroundImage = `url(${loadedSrc})`;
       className = `${className} opacity-transition`;
-    } else {
+    } else if (propSrc) {
       style = { opacity: 0 };
     }
-    return <span style={style} alt="" className={className} />;
+
+    return (
+      <div className={className}>
+        <span style={style} alt="" className={className}>
+          {children}
+        </span>
+      </div>
+    );
   }
 }
