@@ -1,5 +1,6 @@
 import React from "react";
 import LazyBackground from "../LazyBackground/LazyBackGround";
+import "./ProfileHeader.css";
 
 export default class ProfileHeader extends React.Component {
   constructor(props) {

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import "./ProfileNav.css";
 
 export default class ProfileNav extends React.Component {
   constructor(props) {
