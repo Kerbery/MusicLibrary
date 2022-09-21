@@ -8,6 +8,7 @@ namespace PlaylistService.Business
     public interface ILikedTrackLogic
     {
         Task<PagedList<GetLikedTrackDTO>> GetLikedTracks(Guid userId, string userPermalink, PagingParameters pagingParameters);
+        Task<PagedList<Guid>> GetLikedTracksIds(Guid userId, PagingParameters pagingParameters);
         Task<int> LikeTrack( Guid userId, Guid trackId);
         Task<int> UnLikeTrack( Guid userId, Guid trackId);
     }

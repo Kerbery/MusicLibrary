@@ -41,6 +41,27 @@ namespace PlaylistService.Controllers
             return Ok(likedTracks);
         }
 
+        // GET: api/LikedTracks/Ids
+        [HttpGet("Ids")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Guid>>> GetLikedTracksIds([FromQuery] PagingParameters parameters)
+        {
+            var likedTracks = await _likedTrackLogic.GetLikedTracksIds(Guid.Parse(CurrentUserId), parameters);
+
+            var metadata = new
+            {
+                likedTracks.TotalCount,
+                likedTracks.PageSize,
+                likedTracks.CurrentPage,
+                likedTracks.TotalPages,
+                likedTracks.HasNext,
+                likedTracks.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+
+            return Ok(likedTracks);
+        }
+
         // PUT: api/LikedTracks
         [HttpPut("{trackId}")]
         [Authorize]

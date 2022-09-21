@@ -36,6 +36,21 @@ namespace PlaylistService.Business
                 pagingParameters.PageSize);
         }
 
+        public async Task<PagedList<Guid>> GetLikedTracksIds(Guid userId, PagingParameters pagingParameters)
+        {
+            var querry = _context.LikedTracks
+                .Include(lt => lt.Track)
+                .ThenInclude(t => t.User)
+                .Where(lt => lt.UserId == userId)
+                .OrderByDescending(pi => pi.CreatedDate)
+                .Select(lt => lt.TrackId);
+
+
+            return await PagedList<Guid>.ToPagedList(querry,
+                pagingParameters.PageNumber,
+                pagingParameters.PageSize);
+        }
+
         public async Task<int> LikeTrack(Guid userId, Guid trackId)
         {
             var isTrackLiked = await _context.LikedTracks.AnyAsync(lt => lt.TrackId == trackId && lt.UserId == userId);
