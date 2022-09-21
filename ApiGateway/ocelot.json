@@ -73,9 +73,9 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/gateway/LikedTracks/Like",
-      "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/LikedTracks",
+      "UpstreamPathTemplate": "/gateway/LikedTracks/Ids",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/LikedTracks/Ids",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -90,9 +90,9 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "UpstreamPathTemplate": "/gateway/LikedTracks/Unlike",
-      "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/LikedTracks",
+      "UpstreamPathTemplate": "/gateway/LikedTracks/{trackId}",
+      "UpstreamHttpMethod": [ "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/LikedTracks/{trackId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
