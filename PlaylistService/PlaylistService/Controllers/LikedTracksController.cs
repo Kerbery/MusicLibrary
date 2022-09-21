@@ -4,6 +4,7 @@ using PlaylistService.Business;
 using PlaylistService.Data;
 using PlaylistService.DTOs.LikedTrackDTOs;
 using PlaylistService.DTOs.Paging;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace PlaylistService.Controllers
@@ -13,6 +14,7 @@ namespace PlaylistService.Controllers
     public class LikedTracksController : ControllerBase
     {
         private readonly ILikedTrackLogic _likedTrackLogic;
+        private string? CurrentUserId => User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         public LikedTracksController(PlaylistContext context, ILikedTrackLogic likedTrackLogic)
         {
@@ -24,7 +26,6 @@ namespace PlaylistService.Controllers
         public async Task<ActionResult<IEnumerable<GetLikedTrackDTO>>> GetLikedTracks([FromQuery] Guid userId, [FromQuery] string userPermalink, [FromQuery] PagingParameters parameters)
         {
             var likedTracks = await _likedTrackLogic.GetLikedTracks(userId, userPermalink, parameters);
-
 
             var metadata = new
             {
@@ -40,26 +41,22 @@ namespace PlaylistService.Controllers
             return Ok(likedTracks);
         }
 
-        // POST: api/LikedTracks
-        [HttpPost(nameof(Like))]
-        //[Authorize]
-        public async Task<ActionResult<GetLikedTrackDTO>> Like([FromBody] LikeTrackDTO likeTrackDTO)
+        // PUT: api/LikedTracks
+        [HttpPut("{trackId}")]
+        [Authorize]
+        public async Task<ActionResult<GetLikedTrackDTO>> Like(Guid trackId)
         {
-            var userId = Guid.Parse("5a72d732-7b2e-41c0-95b3-2c3cb98ef37f");
-
-            await _likedTrackLogic.LikeTrack(likeTrackDTO.TrackId, userId);
+            await _likedTrackLogic.LikeTrack(Guid.Parse(CurrentUserId), trackId);
 
             return Ok();
         }
 
-        // POST: api/LikedTracks
-        [HttpPost(nameof(Unlike))]
-        //[Authorize]
-        public async Task<ActionResult<GetLikedTrackDTO>> Unlike([FromBody] UnLikeTrackDTO unLikeTrackDTO)
+        // DELETE: api/LikedTracks
+        [HttpDelete("{trackId}")]
+        [Authorize]
+        public async Task<ActionResult<GetLikedTrackDTO>> Unlike(Guid trackId)
         {
-            var userId = Guid.Parse("5a72d732-7b2e-41c0-95b3-2c3cb98ef37f");
-
-            await _likedTrackLogic.UnLikeTrack(unLikeTrackDTO.TrackId, userId);
+            await _likedTrackLogic.UnLikeTrack(Guid.Parse(CurrentUserId), trackId);
 
             return Ok();
         }

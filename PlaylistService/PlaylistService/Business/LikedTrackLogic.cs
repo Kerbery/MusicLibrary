@@ -36,7 +36,7 @@ namespace PlaylistService.Business
                 pagingParameters.PageSize);
         }
 
-        public async Task<int> LikeTrack(Guid trackId, Guid userId)
+        public async Task<int> LikeTrack(Guid userId, Guid trackId)
         {
             var isTrackLiked = await _context.LikedTracks.AnyAsync(lt => lt.TrackId == trackId && lt.UserId == userId);
             if (isTrackLiked)
@@ -56,7 +56,7 @@ namespace PlaylistService.Business
             }
         }
 
-        public async Task<int> UnLikeTrack(Guid trackId, Guid userId)
+        public async Task<int> UnLikeTrack(Guid userId, Guid trackId)
         {
             var likedTrack = await _context.LikedTracks.SingleOrDefaultAsync(lt => lt.TrackId == trackId && lt.UserId == userId);
             if (likedTrack is null)
