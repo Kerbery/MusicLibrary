@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import UserService from "../../services/user.service";
 import Spinner from "../Spinner/Spinner";
 import ProfileHeader from "../ProfileHeader/ProfileHeader";
@@ -44,16 +45,18 @@ export default class Profile extends React.Component {
       Likes: "likes",
       Playlists: "playlists",
     };
-    return isLoading ? (
-      <div className="container">
-        <Spinner />
-      </div>
-    ) : (
-      <div className="container">
-        <ProfileHeader user={user} />
-        <ProfileNav pages={pages} />
-        <Outlet />
-      </div>
+    return (
+      <Container>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <ProfileHeader user={user} />
+            <ProfileNav pages={pages} />
+            <Outlet />
+          </>
+        )}
+      </Container>
     );
   }
 }

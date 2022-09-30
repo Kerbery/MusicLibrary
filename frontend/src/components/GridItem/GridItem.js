@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LazyBackground from "../LazyBackground/LazyBackGround";
 import "./GridItem.css";
@@ -12,7 +13,7 @@ export default class GridItem extends Component {
     let backgroundImage = this.props.gridItemData.artworkUrl;
     backgroundImage = /http/.test(backgroundImage) ? backgroundImage : "";
     return (
-      <div className="thumbnail col-md-2 col-sm-4">
+      <Col className="thumbnail" md="2" sm="4">
         <div className="artwork">
           <Link to={this.state.gridItemData.url}>
             <div className="placeholder-art">
@@ -36,7 +37,7 @@ export default class GridItem extends Component {
             </Link>
           </div>
         </div>
-      </div>
+      </Col>
     );
   }
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Navbar, Nav as NavRB, NavDropdown, Container } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import AuthService from "../../services/auth.service";
 import "./Nav.css";
 
@@ -13,33 +14,21 @@ export default class Nav extends React.Component {
     let { isLoggedIn, logIn } = this.props;
 
     return (
-      <nav className="navbar fixed-top navbar-dark bg-dark justify-content-between">
-        <div className="container">
-          <a className="navbar-brand" href="/">
-            MusicLibrary
-          </a>
-          <div className="navbar-expand">
-            <ul className="nav navbar-nav">
-              {isLoggedIn ? (
-                this.renderUserDropdown()
-              ) : (
-                <div className="navbar-nav ml-auto">
-                  <li className="nav-item">
-                    <Link to="" className="nav-link" onClick={logIn}>
-                      Login
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to={"/Register"} className="nav-link">
-                      Sign Up
-                    </Link>
-                  </li>
-                </div>
-              )}
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <Navbar bg="dark" variant="dark" fixed="top">
+        <Container>
+          <Navbar.Brand href="/">MusicLibrary</Navbar.Brand>
+          <NavRB>
+            {isLoggedIn ? (
+              this.renderUserDropdown()
+            ) : (
+              <>
+                <NavRB.Link onClick={logIn}>Login</NavRB.Link>
+                <NavRB.Link href="/Register">Sign Up</NavRB.Link>
+              </>
+            )}
+          </NavRB>
+        </Container>
+      </Navbar>
     );
   }
 
@@ -51,45 +40,34 @@ export default class Nav extends React.Component {
       Playlists: "/playlists",
     };
     let { user, logOut } = this.props;
-    let userId = AuthService.user.preferred_username;
+    let userName = AuthService.user.preferred_username;
 
     return (
-      <li className="nav-item dropdown">
-        <Link
-          className="nav-link dropdown-toggle"
-          to="#"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
+      <NavDropdown
+        id="collasible-nav-dropdown"
+        title={
+          <>
+            <span className="img-circle avatar" alt="&nbsp;" />
+            {` ${user.given_name}`}
+          </>
+        }
+      >
+        {Object.keys(pages).map((category, i) => (
+          <LinkContainer
+            key={i}
+            isActive={() => false}
+            to={`/${userName}${pages[category]}`}
+          >
+            <NavDropdown.Item>{category}</NavDropdown.Item>
+          </LinkContainer>
+        ))}
+        <NavDropdown.Divider />
+        <NavDropdown.Item
+          onClick={() => logOut({ returnTo: window.location.origin })}
         >
-          <span className="img-circle avatar" alt="&nbsp;"></span>
-          {` ${user.given_name} `}
-        </Link>
-        <ul className="dropdown-menu">
-          {Object.keys(pages).map((category, i) => (
-            <li key={i}>
-              <Link
-                className="dropdown-item"
-                to={`/${userId}${pages[category]}`}
-              >
-                {category}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <hr className="dropdown-divider" />
-          </li>
-          <li>
-            <Link
-              to=""
-              className="dropdown-item"
-              onClick={() => logOut({ returnTo: window.location.origin })}
-            >
-              LogOut
-            </Link>
-          </li>
-        </ul>
-      </li>
+          LogOut
+        </NavDropdown.Item>
+      </NavDropdown>
     );
   }
 }

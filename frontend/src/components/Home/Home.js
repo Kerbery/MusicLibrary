@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { Button, Container } from "react-bootstrap";
 
 export default class Home extends Component {
   render() {
     return (
-      <div className="container mt-4">
-        <div className="jumbotron align-middle">
+      <Container className="mt-4">
+        <div className="bg-light p-5 rounded-3 m-3 align-middle">
           <h1 className="display-4">Welcome!</h1>
           <p className="lead">
             You are currently using the client app of the MusicLibrary. This app
@@ -13,16 +14,16 @@ export default class Home extends Component {
           <hr className="my-4" />
           <p>You can access the whole project's repository on GitHub.</p>
           <p className="lead">
-            <a
-              className="btn btn-primary btn-lg"
+            <Button
+              variant="primary"
+              size="lg"
               href="https://github.com/Kerbery/MusicLibrary"
-              role="button"
             >
               Go to GitHub
-            </a>
+            </Button>
           </p>
         </div>
-      </div>
+      </Container>
     );
   }
 }

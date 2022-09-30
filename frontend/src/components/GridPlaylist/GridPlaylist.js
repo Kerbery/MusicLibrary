@@ -1,4 +1,5 @@
 import React from "react";
+import { Col, Container } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
 import GridItem from "../GridItem/GridItem";
 import Spinner from "../Spinner/Spinner";
@@ -34,20 +35,20 @@ export default class GridPlaylist extends React.Component {
 
   render() {
     return (
-      <div className="container body-content">
-        <div className="col-md-12 h-100 jumbotron">
+      <Container className="body-content">
+        <Col md="12" className="h-100">
           <InfiniteScroll
             dataLength={this.state.items.length}
             next={this.fetchMoreItems.bind(this)}
             hasMore={this.state.hasMore}
             loader={<Spinner />}
           >
-            {this.state.items.map((items, i) => (
-              <GridItem gridItemData={items} key={`track${i}`} />
+            {this.state.items.map((item, i) => (
+              <GridItem gridItemData={item} key={`track${i}`} />
             ))}
           </InfiniteScroll>
-        </div>
-      </div>
+        </Col>
+      </Container>
     );
   }
 
