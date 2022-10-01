@@ -8,24 +8,19 @@ const LIKED_TRACKS_API_URL = "/gateway/LikedTracks";
 
 class PlaylistService {
   async getPlaylists(userPermalink, PageNumber = 1, PageSize = 24) {
-    let token = await AuthService.getAccessToken();
     let params = new URLSearchParams({
       userPermalink,
       PageNumber,
       PageSize,
     });
-    return axios
-      .get(`${PLAYLISTS_API_URL}?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(
-        (response) => {
-          let paging = JSON.parse(response.headers["x-pagination"]);
-          let items = response.data.map((item) => getPlaylistData(item));
-          return { paging, items };
-        },
-        (error) => console.log(error)
-      );
+    return axios.get(`${PLAYLISTS_API_URL}?${params}`).then(
+      (response) => {
+        let paging = JSON.parse(response.headers["x-pagination"]);
+        let items = response.data.map((item) => getPlaylistData(item));
+        return { paging, items };
+      },
+      (error) => console.log(error)
+    );
   }
 
   async getPlaylist(playlistId) {
@@ -49,25 +44,20 @@ class PlaylistService {
   }
 
   async getLikes(userPermalink, PageNumber = 1, PageSize = 24) {
-    let token = await AuthService.getAccessToken();
     let params = new URLSearchParams({
       userPermalink,
       PageNumber,
       PageSize,
     });
-    return axios
-      .get(`${LIKED_TRACKS_API_URL}?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(
-        (response) => {
-          let paging = JSON.parse(response.headers["x-pagination"]);
-          let items = response.data.map((item) => getTrackDataFromItem(item));
+    return axios.get(`${LIKED_TRACKS_API_URL}?${params}`).then(
+      (response) => {
+        let paging = JSON.parse(response.headers["x-pagination"]);
+        let items = response.data.map((item) => getTrackDataFromItem(item));
 
-          return { paging, items };
-        },
-        (error) => console.log(error)
-      );
+        return { paging, items };
+      },
+      (error) => console.log(error)
+    );
   }
 
   async getLikedTracksIds(userPermalink, PageNumber, PageSize) {
