@@ -5,7 +5,20 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/gateway/Playlists",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "POST" ],
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Playlists",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "playlistservice",
+          "Port": 443
+        }
+      ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Playlists",
+      "UpstreamHttpMethod": [ "PUT", "DELETE", "POST" ],
       "DownstreamPathTemplate": "/api/Playlists",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
