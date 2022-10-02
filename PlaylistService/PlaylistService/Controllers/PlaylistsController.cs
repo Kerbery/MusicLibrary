@@ -22,9 +22,9 @@ namespace PlaylistService.Controllers
 
         // GET: api/<PlaylistsController>/?userId={userId}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId, [FromQuery] PagingParameters pagingParameters)
+        public async Task<ActionResult<IEnumerable<GetPlaylistDTO>>> GetUserPLaylistsAsync([FromQuery] Guid userId, [FromQuery] string userPermalink, [FromQuery] PagingParameters pagingParameters)
         {
-            var playlists = await _playlistService.GetUserPlaylists(userId, pagingParameters);
+            var playlists = await _playlistService.GetUserPlaylists(userId, userPermalink, pagingParameters);
 
             var metadata = new
             {
@@ -36,7 +36,7 @@ namespace PlaylistService.Controllers
                 playlists.HasPrevious
             };
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
-
+            
             return Ok(playlists);
         }
 

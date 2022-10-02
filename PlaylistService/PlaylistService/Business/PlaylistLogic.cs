@@ -16,13 +16,19 @@ namespace PlaylistService.Business
             _context = context;
         }
 
-        public async Task<PagedList<GetPlaylistDTO>> GetUserPlaylists(Guid userId, PagingParameters pagingParameters)
+        public async Task<PagedList<GetPlaylistDTO>> GetUserPlaylists(Guid userId, string userPermalink, PagingParameters pagingParameters)
         {
+            if (!string.IsNullOrEmpty(userPermalink))
+            {
+                userId = (await _context.Users.SingleOrDefaultAsync(u => u.Permalink == userPermalink)).Id;
+            }
+
             var querry = _context.Playlists
                 .Include(pl => pl.User)
                 .Include(pl => pl.Items)
                 .ThenInclude(pi => pi.Track)
                 .ThenInclude(t => t.User)
+                .Where(u => u.UserId == userId)
                 .Select(pl => pl.AsDTO());
 
             return await PagedList<GetPlaylistDTO>.ToPagedList(querry,

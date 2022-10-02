@@ -6,7 +6,7 @@ namespace PlaylistService.Business
 {
     public interface IPlaylistLogic
     {
-        Task<PagedList<GetPlaylistDTO>> GetUserPlaylists(Guid userId, PagingParameters pagingParameters);
+        Task<PagedList<GetPlaylistDTO>> GetUserPlaylists(Guid userId, string userPermalink, PagingParameters pagingParameters);
         Task<GetPlaylistDTO> GetPlaylist(Guid playlistId);
         Task<GetPlaylistDTO> CreatePlaylist(CreatePlaylistDTO createPlaylistDTO);
         Task<int> UpdatePlaylist(Guid playlistId, UpdatePlaylistDTO updatePlaylistDTO);
