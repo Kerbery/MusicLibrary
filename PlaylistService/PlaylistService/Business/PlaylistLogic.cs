@@ -25,7 +25,7 @@ namespace PlaylistService.Business
 
             var querry = _context.Playlists
                 .Include(pl => pl.User)
-                .Include(pl => pl.Items)
+                .Include(pl => pl.Items.OrderByDescending(i=>i.CreatedDate))
                 .ThenInclude(pi => pi.Track)
                 .ThenInclude(t => t.User)
                 .Where(u => u.UserId == userId)

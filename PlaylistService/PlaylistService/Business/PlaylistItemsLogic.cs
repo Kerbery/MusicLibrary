@@ -22,6 +22,7 @@ namespace PlaylistService.Business
                 .Where(pi => pi.PlaylistId == playlistId)
                 .Include(pi => pi.Track)
                 .ThenInclude(t => t.User)
+                .OrderByDescending(pi=>pi.CreatedDate)
                 .Select(pi => pi.AsDTO());
 
 
