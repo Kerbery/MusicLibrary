@@ -96,7 +96,7 @@ namespace UserProvider.Controllers
             existingUser.Permalink = userDTO.Permalink;
 
             await _repository.UpdateAsync(existingUser);
-            await _publishEndpoint.Publish(new UserCreated(existingUser.Id, existingUser.UserName, existingUser.Permalink, existingUser.FirstName, existingUser.FirstName, existingUser.AvatarUrl));
+            await _publishEndpoint.Publish(new UserUpdated(existingUser.Id, existingUser.UserName, existingUser.Permalink, existingUser.FirstName, existingUser.FirstName, existingUser.AvatarUrl));
 
             return NoContent();
         }
