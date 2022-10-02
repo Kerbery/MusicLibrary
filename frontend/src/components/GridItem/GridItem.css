@@ -34,8 +34,8 @@
   text-align: right;
 }
 
-.track_uploader,
-.track_title {
+.link-light,
+.link-dark {
   font: 12px/1.4 Lucida Grande, Lucida Sans Unicode, Lucida Sans, Garuda,
     Verdana, Tahoma, sans-serif;
   font-family: Interstate, Lucida Grande, Lucida Sans Unicode, Lucida Sans,
@@ -49,11 +49,11 @@
   text-overflow: ellipsis;
 }
 
-.track_title {
+.link-dark {
   font-size: 14px;
 }
 
-.track_uploader {
+.link-light {
   font-size: 12px;
   word-break: normal;
 }
@@ -62,22 +62,22 @@ a {
   text-decoration: none;
 }
 
-.track_title a:link,
-.track_title a:active,
-.track_title a:visited {
+.link-dark a:link,
+.link-dark a:active,
+.link-dark a:visited {
   color: #333;
 }
 
-.track_title a:hover {
+.link-dark a:hover {
   color: #000;
 }
 
-.track_uploader a:link,
-.track_uploader a:active,
-.track_uploader a:visited {
+.link-light a:link,
+.link-light a:active,
+.link-light a:visited {
   color: #999;
 }
 
-.track_uploader a:hover {
+.link-light a:hover {
   color: #333;
 }
