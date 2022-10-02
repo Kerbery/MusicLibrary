@@ -89,7 +89,6 @@ namespace UserProvider.Controllers
                 return NotFound();
             }
 
-            existingUser.Id = existingUser.Id;
             existingUser.UserName = userDTO.UserName;
             existingUser.FirstName = userDTO.FirstName;
             existingUser.LastName = userDTO.LastName;
