@@ -1,11 +1,15 @@
 import axios from "axios";
-import { getTrackData } from "./mapping.helpers";
+import { getTrackData, getTrackMediaData } from "./mapping.helpers";
 
 const API_TRACKS_URL = "/gateway/Tracks";
 
 class TrackService {
   async getTrackInfo(permalink) {
-    return axios.get(`${API_TRACKS_URL}/permalink/${permalink}`);
+    return axios
+      .get(`${API_TRACKS_URL}/permalink/${permalink}`)
+      .then((response) => {
+        return getTrackMediaData(response.data);
+      });
   }
   async getTracks(userPermalink, PageNumber = 1, PageSize = 24) {
     let params = new URLSearchParams({
