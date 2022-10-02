@@ -16,13 +16,11 @@ export default class GridItem extends Component {
       <Col className="thumbnail" md="2" sm="4">
         <div className="artwork">
           <Link to={this.state.gridItemData.url}>
-            <div className="placeholder-art">
-              <LazyBackground
-                src={backgroundImage}
-                alt=""
-                className="placeholder-art"
-              />
-            </div>
+            <LazyBackground
+              src={backgroundImage}
+              alt=""
+              className="placeholder-art"
+            />
           </Link>
         </div>
         <div className="description">
