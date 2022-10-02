@@ -46,7 +46,7 @@ export default class Profile extends React.Component {
       Playlists: "playlists",
     };
     return (
-      <Container>
+      <Container className="px-0">
         {isLoading ? (
           <Spinner />
         ) : (

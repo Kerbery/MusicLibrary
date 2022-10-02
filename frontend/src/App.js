@@ -15,6 +15,8 @@ import WrappedTrack from "./components/Track/WrappedTrack";
 import Home from "./components/Home/Home";
 import NotFound from "./components/NotFound/NotFound";
 import Nav from "./components/Nav/Nav";
+import { Container } from "react-bootstrap";
+import "./App.css";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -48,14 +50,14 @@ export default class App extends Component {
       return <div>Oops... {error.message}</div>;
     }*/
     return (
-      <div className="d-flex flex-column h-100">
+      <div className="d-flex flex-column vh-100">
         <Nav
           isLoggedIn={isLoggedIn}
           user={user}
           logIn={this.logIn}
           logOut={this.logOut}
         ></Nav>
-        <main className="flex-shrink-0">
+        <Container as={"main"} className="flex-grow-1 px-0 bg-white">
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route exact path="/Home" element={<Home />} />
@@ -101,7 +103,7 @@ export default class App extends Component {
             <Route path="*" element={<NotFound />} />
             <Route path="not-found" element={<NotFound />} />
           </Routes>
-        </main>
+        </Container>
       </div>
     );
   }

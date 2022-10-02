@@ -14,7 +14,7 @@ export default class Nav extends React.Component {
     let { isLoggedIn, logIn } = this.props;
 
     return (
-      <Navbar bg="dark" variant="dark" fixed="top">
+      <Navbar bg="dark" variant="dark" fixed="top" className="mainNav">
         <Container>
           <Navbar.Brand href="/">MusicLibrary</Navbar.Brand>
           <NavRB>
