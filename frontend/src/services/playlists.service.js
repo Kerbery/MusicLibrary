@@ -43,6 +43,75 @@ class PlaylistService {
     });
   }
 
+  async addTrackToPlaylist(trackId, playlistId) {
+    let token = await AuthService.getAccessToken();
+    let data = {
+      trackId,
+      playlistId,
+    };
+    return axios
+      .post(PLAYLIST_ITEMS_API_URL, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(
+        (response) => {
+          debugger;
+          console.log(response);
+          return response.status === 201;
+        },
+        (error) => {
+          debugger;
+          console.log(error);
+          return error.response.status === 201;
+        }
+      );
+  }
+
+  async deletePlaylistItem(playlistItemId) {
+    debugger;
+    let token = await AuthService.getAccessToken();
+    return axios
+      .delete(`${PLAYLIST_ITEMS_API_URL}/${playlistItemId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(
+        (response) => {
+          debugger;
+          console.log(response);
+          return response.status === 200;
+        },
+        (error) => {
+          debugger;
+          console.log(error);
+          return error.response.status === 200;
+        }
+      );
+  }
+
+  async createPlaylist(title, description = "") {
+    let token = await AuthService.getAccessToken();
+    let data = {
+      title,
+      description,
+    };
+    return axios
+      .post(PLAYLISTS_API_URL, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(
+        (response) => {
+          debugger;
+          console.log(response);
+          return response.status === 201 ? response.data : false;
+        },
+        (error) => {
+          debugger;
+          console.log(error);
+          return error.response.status === 201;
+        }
+      );
+  }
+
   async getLikes(userPermalink, PageNumber = 1, PageSize = 24) {
     let params = new URLSearchParams({
       userPermalink,
