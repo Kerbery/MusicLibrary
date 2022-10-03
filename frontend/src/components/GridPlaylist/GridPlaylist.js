@@ -20,12 +20,14 @@ export default class GridPlaylist extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.page !== prevProps.page) {
+    let previousPage = prevProps.page;
+    let currentPage = this.props.page;
+    if (currentPage !== previousPage) {
       this.setState(
         {
           items: [],
           pageNumber: 1,
-          page: this.props.page,
+          page: currentPage,
           hasMore: true,
         },
         () => this.fetchMoreItems()
@@ -58,7 +60,7 @@ export default class GridPlaylist extends React.Component {
       this.setState({
         items: [...items, ...response.items],
         hasMore: response.paging.HasNext,
-        pageNumber: this.state.pageNumber + 1,
+        pageNumber: pageNumber + 1,
       });
     });
   }

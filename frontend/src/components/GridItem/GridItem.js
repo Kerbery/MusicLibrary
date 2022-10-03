@@ -7,7 +7,7 @@ import "./GridItem.css";
 export default class GridItem extends Component {
   constructor(props) {
     super(props);
-    this.state = { gridItemData: this.props.gridItemData };
+    this.state = { gridItemData: props.gridItemData };
   }
   render() {
     let backgroundImage = this.props.gridItemData.artworkUrl;

@@ -11,8 +11,8 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: this.props.user,
-      page: this.props.page,
+      userId: props.user,
+      page: props.page,
       user: {},
       isLoading: true,
     };
@@ -24,16 +24,19 @@ export default class Profile extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.user !== this.props.user) {
-      this.setState({ userId: this.props.user, isLoading: true }, () => {
-        this.fetchUserInfo(this.state.userId);
-      });
+    let previousUserId = prevProps.user;
+    let currentUserId = this.props.user;
+
+    if (currentUserId !== previousUserId) {
+      this.setState({ isLoading: true }, () =>
+        this.fetchUserInfo(currentUserId)
+      );
     }
   }
 
   fetchUserInfo(userId) {
     UserService.getUserInfo(userId).then((user) => {
-      this.setState({ user, isLoading: false });
+      this.setState({ user, userId, isLoading: false });
     });
   }
 

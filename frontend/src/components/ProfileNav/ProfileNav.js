@@ -7,7 +7,7 @@ export default class ProfileNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pages: this.props.pages,
+      pages: props.pages,
     };
   }
   render() {

@@ -13,29 +13,32 @@ export default class AddToModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: this.props.show ?? false,
+      show: props.show ?? false,
       items: [],
       pageNumber: 1,
       hasMore: true,
-      trackId: this.props.trackId,
+      trackId: props.trackId,
       playlistTitle: "",
       createdPlaylistId: undefined,
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.show && this.props.show) {
+    let wasPreviouslyShowing = prevProps.show;
+    let isCurrentlyShowing = this.props.show;
+
+    if (!wasPreviouslyShowing && isCurrentlyShowing) {
       //showing modal
       this.setState(
         {
-          show: this.props.show,
+          show: isCurrentlyShowing,
           items: [],
           pageNumber: 1,
           hasMore: true,
         },
         () => this.fetchMoreItems()
       );
-    } else if (prevProps.show && !this.props.show) {
+    } else if (wasPreviouslyShowing && !isCurrentlyShowing) {
       // closing modal
       this.setState({ playlistTitle: "", createdPlaylistId: undefined });
     }
