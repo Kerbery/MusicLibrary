@@ -1,0 +1,11 @@
+.userBadge {
+  width: 120px;
+  padding: 4px;
+}
+
+.badgeAvatar {
+  border-radius: 50%;
+  width: 112px;
+  height: 112px;
+  position: relative;
+}

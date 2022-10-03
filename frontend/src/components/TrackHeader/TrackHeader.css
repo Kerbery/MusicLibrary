@@ -1,0 +1,49 @@
+.trackHeader {
+  background: linear-gradient(
+    135deg,
+    rgb(230, 230, 230) 0%,
+    rgb(134, 134, 134) 100%
+  );
+}
+
+.trackArtwork {
+  height: 300px;
+  width: 300px;
+  position: relative;
+}
+
+.trackTitle {
+  display: inline;
+  color: #fff;
+  font-weight: 100;
+  font-size: 24px;
+  line-height: 37px;
+  padding: 0px 5px;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-decoration-break: clone;
+}
+
+.trackUploader {
+  display: inline;
+  color: #ccc;
+  font-weight: 100;
+  padding: 2px 7px;
+  font-size: 16px;
+  line-height: 1.2;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.trackUploader a:active,
+.trackUploader a:link,
+.trackUploader a:visited {
+  color: #ccc;
+}
+
+.trackUploader a:hover {
+  color: #eee;
+}
+
+.audioControls {
+  position: relative;
+  bottom: 0px;
+}
