@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { likeTrack, unlikeTrack, fetchLikesIds } from "../../redux/actions.js";
-import { getLikeStatus } from "../../redux/selectors.js";
-import authService from "../../services/auth.service.js";
+import {
+  likeTrack,
+  unlikeTrack,
+  fetchLikesIds,
+  selectLikeStatus,
+} from "../../redux/reducers/likesSlice.js";
 
 class LikeTrackButton extends React.Component {
   constructor(props) {
@@ -17,8 +20,7 @@ class LikeTrackButton extends React.Component {
   }
 
   componentDidMount() {
-    const username = authService.user.preferred_username;
-    this.props.fetchLikesIds(username);
+    this.props.fetchLikesIds();
   }
 
   componentDidUpdate() {
@@ -61,7 +63,7 @@ class LikeTrackButton extends React.Component {
 
 const mapStateToProps = (state, props) => {
   const { trackId } = props;
-  const { isLiked } = getLikeStatus(state, trackId);
+  const { isLiked } = selectLikeStatus(state, trackId);
   return { isLiked };
 };
 

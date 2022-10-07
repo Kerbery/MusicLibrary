@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import likes from "./likes.js";
+import likes from "./likesSlice";
 
 export default combineReducers({ likes });
