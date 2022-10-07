@@ -1,0 +1,3 @@
+export const LIKE_TRACK = "LIKE_TRACK";
+export const UNLIKE_TRACK = "UNLIKE_TRACK";
+export const SET_LIKED_TRACKS_IDS = "SET_LIKED_TRACKS_IDS";

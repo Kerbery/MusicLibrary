@@ -32,6 +32,10 @@
   color: #f50;
 }
 
+.scButton.active:disabled {
+  color: #f94;
+}
+
 .scFollowButton,
 .scFollowButton.active,
 .scFollowButton:hover,
